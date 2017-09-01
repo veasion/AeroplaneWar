@@ -44,16 +44,11 @@ public class Battleground implements Serializable{
 		this.bgImage=bgImage;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void playBgMusic(String bgMusicPath){
+	public void playBackgroundMusic(String bgMusicPath){
 		if(bgMusicPath != null){
 			this.bgMusicPath=bgMusicPath;
 		}
-		if(thread != null){
-			thread.stop();
-		}else{
-			thread=new BgMusicThread();
-		}
+		thread=new BgMusicThread();
 		thread.start();
 	}
 	

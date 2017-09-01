@@ -146,7 +146,7 @@ public class GameBean implements Serializable{
 		this.battleground=new Battleground(this, 
 				Resource.IMAGE_Background, 
 				Resource.MUSIC_bgsound);
-		this.battleground.playBgMusic(null);
+		this.battleground.playBackgroundMusic(null);
 		
 		long systemTime=System.currentTimeMillis();
 		

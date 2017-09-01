@@ -88,6 +88,11 @@ public class MyPlane implements Plane, Serializable{
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet04), bx+size+10, by+size/2+5);
 		}
+		if(this.blood<=28){
+			g.setColor(Color.red);
+			g.setFont(new Font("黑体", 0, 18));
+			g.drawString("注意：血量过低！", 250, 75);
+		}
 		this.move();
 	}
 
@@ -243,6 +248,9 @@ public class MyPlane implements Plane, Serializable{
 			this.blood=0;
 			this.isLive=false;
 			p.status=GameBean.STATUS_OVER;
+			p.battleground.playMusic(Resource.MUSIC_gameover);;
+		}else if(this.blood<=28){
+			p.battleground.playMusic(Resource.MUSIC_Health_Low);
 		}else if(this.blood>Constants.MyPlaneBlood){
 			this.blood=Constants.MyPlaneBlood;
 		}
