@@ -23,6 +23,7 @@ public class Resource {
 	public final static Image IMAGE_RocketFly01=ResourceUtil.loadImage(IMAGE_PATH+"RocketFly01.png");
 	public final static Image IMAGE_RocketFly02=ResourceUtil.loadImage(IMAGE_PATH+"RocketFly02.png");
 	public final static Image IMAGE_RocketFly03=ResourceUtil.loadImage(IMAGE_PATH+"RocketFly03.png");
+	public final static Image IMAGE_breakRecord=ResourceUtil.loadImage(IMAGE_PATH+"breakRecord.png");
 	
 	// 背景图片资源
 	public final static Image IMAGE_Background1=ResourceUtil.loadImage(IMAGE_PATH+"Background/Background1.png");

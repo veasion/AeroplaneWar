@@ -19,6 +19,7 @@ import cn.veasion.bean.MyBullet;
 import cn.veasion.bean.WeaponsSupply;
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
+import cn.veasion.util.VeaUtil;
 
 /**
  * 飞机大战画板核心类.
@@ -124,14 +125,14 @@ public class PlaneAction extends JPanel{
 		g.drawImage(Resource.IMAGE_Title, (p.containerWidth-350)/2, (p.containerHeight-140)/2, 350, 140, null);
 		g.drawImage(Resource.IMAGE_Title_Tips, (p.containerWidth-350)/2, p.containerHeight-120, 340, 80, null);
 		// 绘制移动小飞机
-		p.temp += 2;
-		int count=p.temp/20;
+		p.homeStyle += 2;
+		int count=p.homeStyle/20;
 		g.drawImage(Resource.IMAGE_Rocket, count*100+20, 100, 70, 40, null);
 		g.drawImage(Resource.IMAGE_RocketFly01, (count-1)*100+20, 100, 50, 50, null);
 		g.drawImage(Resource.IMAGE_RocketFly02, (count-2)*100+20, 100, 50, 50, null);
 		g.drawImage(Resource.IMAGE_RocketFly03, (count-3)*100+20, 100, 50, 50, null);
 		if((count-3)*100+20 >= p.containerWidth){
-			p.temp=0;
+			p.homeStyle=0;
 		}
 	}
 	
@@ -268,9 +269,42 @@ public class PlaneAction extends JPanel{
 	/**
 	 * 绘制游戏结束界面 
 	 */
+	private Integer historyScore;
 	private void paintGameOver(Graphics g){
-		//----------
-		g.drawImage(Resource.IMAGE_GameOver, (p.containerWidth-350)/2, 60, 350, 140, null);
+		if(!p.firstReadObjFile){
+			try {
+				// 读取历史最高纪录
+				historyScore=VeaUtil.readHistoryRecord();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(historyScore==null || historyScore<p.score){
+				try {
+					// 保存本次新纪录
+					VeaUtil.saveCurrentRecord(p.score);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			p.firstReadObjFile=true;
+		}
+		if(historyScore==null){
+			historyScore=0;
+		}
+		g.drawImage(Resource.IMAGE_GameOver, (p.containerWidth-350)/2, 40, 350, 140, null);
+		if(p.score > historyScore){
+			// 破历史纪录
+			g.drawImage(Resource.IMAGE_breakRecord, (p.containerWidth-120)/2, 180, 120, 50, null);
+		}else{
+			// 历史最高纪录
+			g.setColor(Color.black);
+			g.setFont(new Font("黑体", Font.BOLD, 24));
+			String historyStr="历史最高纪录："+historyScore+"分";
+			int x=(p.containerWidth-historyStr.length()*(26-String.valueOf(historyScore).length()/2))/2;
+			g.drawString(historyStr, x+2, 220);
+			g.setColor(Color.white);
+			g.drawString(historyStr, x, 220);
+		}
 		//绘制结束时分数显示阴影
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.PLAIN, 36));

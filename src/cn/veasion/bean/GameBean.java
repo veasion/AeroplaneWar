@@ -137,10 +137,11 @@ public class GameBean implements Serializable{
 	 */
 	public long createBloodSupply02Time;
 	
-	/**
-	 * 临时变量
-	 */
-	public int temp=0;
+	/**Home变量*/
+	public int homeStyle=0;
+	
+	/**本局第一次读取和保存文件*/
+	public boolean firstReadObjFile;
 	
 	/**
 	 * 游戏初始化 
@@ -157,6 +158,7 @@ public class GameBean implements Serializable{
 		this.initProducedTime();
 		this.score=0;
 		this.myPlane=new MyPlane(this);
+		this.firstReadObjFile=false;
 		this.myPlane.create(null, Constants.MyPlaneBlood, 
 				new Rectangle((containerWidth-80)/2, containerHeight-70-30, 80, 70));
 	}
