@@ -8,6 +8,7 @@ import java.io.Serializable;
 import cn.veasion.bean.inf.Bullet;
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
+import cn.veasion.util.VeaUtil;
 
 /**
  * 敌方子弹.
@@ -32,7 +33,7 @@ public class EnemyBullet implements Bullet, Serializable{
 		if(image !=null){
 			this.image=image;
 		}else{
-			this.image=Resource.IMAGE_Bullet05;
+			this.image=VeaUtil.random(Resource.IMAGE_EnemyBullets);
 		}
 		this.r=r;
 		this.power=power;
@@ -53,7 +54,7 @@ public class EnemyBullet implements Bullet, Serializable{
 
 	@Override
 	public void move() {
-		if(GameBean.STATUS_GAME == p.status){
+		if(isLive && p.allowMove()){
 			r.y+=Constants.EnemyBulletVelocity;
 			if(r.y>=p.containerHeight){
 				this.isLive=false;

@@ -54,9 +54,11 @@ public class BloodSupply implements Supply, Serializable{
 	
 	@Override
 	public void move() {
-		r.y+=5;
-		if(r.y>p.containerHeight){
-			this.isLive=false;
+		if(isLive && p.allowMove()){
+			r.y+=5;
+			if(r.y>p.containerHeight){
+				this.isLive=false;
+			}
 		}
 	}
 	

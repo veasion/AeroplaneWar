@@ -6,6 +6,13 @@ package cn.veasion.util;
  */
 public class Constants {
 	
+	//=============== 开发常量  ===============\\
+	
+	/**
+	 * 我方不死之身 
+	 */
+	public final static boolean isUndead=false;
+	
 	//=============== 我方常量  ===============\\
 	
 	/**
@@ -44,6 +51,11 @@ public class Constants {
 	 * 敌方飞机默认血量
 	 */
 	public final static int EnemyBlood=10;
+	
+	/**
+	 * 敌方飞机最大数量 
+	 */
+	public final static int EnemyMaxCount=8;
 	
 	/**
 	 * 敌方飞机默认移动速度
@@ -97,5 +109,10 @@ public class Constants {
 	 * 生产超级武器04补给默认频率 
 	 */
 	public final static int CreateBulletSupply04Frequency=48000;
+	
+	/**
+	 * 生产超级武器05补给默认频率 
+	 */
+	public final static int CreateBulletSupply05Frequency=59000;
 	
 }

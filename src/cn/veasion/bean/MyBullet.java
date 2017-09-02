@@ -20,11 +20,20 @@ public class MyBullet implements Bullet, Serializable{
 	private GameBean p;
 	private boolean isLive;
 	private Image image;
+	private Image [] images;
 	private int power; // 威力
 	private Rectangle r;
+	private boolean isSuperWeapon;
+	private int index;
 	
 	public MyBullet(GameBean p) {
 		this.p=p;
+		this.isSuperWeapon=false;
+	}
+	
+	public MyBullet(GameBean p, boolean isSuperWeapon) {
+		this.p=p;
+		this.isSuperWeapon=isSuperWeapon;
 	}
 	
 	@Override
@@ -34,10 +43,25 @@ public class MyBullet implements Bullet, Serializable{
 		this.r=r;
 		this.isLive=true;
 	}
+	
+	public void create(Image [] images, int power, Rectangle r) {
+		this.images=images;
+		this.image=null;
+		this.power=power;
+		this.r=r;
+		this.isLive=true;
+	}
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawImage(image, r.x, r.y, r.width, r.height, null);
+		if(images !=null){
+			g.drawImage(images[index++], r.x, r.y, r.width, r.height, null);
+			if(index>=images.length){
+				index=0;
+			}
+		}else{
+			g.drawImage(image, r.x, r.y, r.width, r.height, null);
+		}
 		this.move();
 	}
 
@@ -48,7 +72,7 @@ public class MyBullet implements Bullet, Serializable{
 
 	@Override
 	public void move() {
-		if(GameBean.STATUS_GAME == p.status){
+		if(isLive && p.allowMove()){
 			r.y-=Constants.MyBulletVelocity;
 			if(r.y<0){
 				this.isLive=false;
@@ -61,7 +85,6 @@ public class MyBullet implements Bullet, Serializable{
 	@Override
 	public void kill() {
 		Rectangle r=this.area();
-		boolean isSuperWeaponBullet=Resource.IMAGE_Bullet04==image;
 		// 杀敌方飞机
 		for (int i = 0, len=p.enemyPlanes.size(); i < len; i++) {
 			EnemyPlane ep=p.enemyPlanes.get(i);
@@ -74,7 +97,7 @@ public class MyBullet implements Bullet, Serializable{
 					p.explosions.add(e);
 					p.battleground.playMusic(Resource.MUSIC_Enemy_Boom);
 				}
-				if(!isSuperWeaponBullet){
+				if(!isSuperWeapon){
 					this.isLive=false;
 				}
 				break;
@@ -94,7 +117,7 @@ public class MyBullet implements Bullet, Serializable{
 			}
 		}
 		// 超级子弹抵消飞机敌方子弹
-		if(isSuperWeaponBullet){
+		if(isSuperWeapon){
 			for (int i = 0, len=p.enemyBullets.size(); i < len; i++) {
 				EnemyBullet eb=p.enemyBullets.get(i);
 				if(eb.isLive() && r.intersects(eb.area())){

@@ -181,7 +181,7 @@ public class PlaneAction extends JPanel{
 			}
 		}
 		// 武器补给箱
-		for (int i = 0, len=p.weaponsSupplys.size(); i < len; i++) {
+		for (int i =p.weaponsSupplys.size()-1; i>=0 ; i--) {
 			WeaponsSupply ws=p.weaponsSupplys.get(i);
 			if(ws.isLive()){
 				ws.draw(g);

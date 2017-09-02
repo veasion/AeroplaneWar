@@ -119,6 +119,11 @@ public class GameBean implements Serializable{
 	public long createBulletSupply04Time;
 	
 	/**
+	 * 创建子弹05补给时间
+	 */
+	public long createBulletSupply05Time;
+	
+	/**
 	 * 创建加血补给时间
 	 */
 	public long createBloodSupplyTime;
@@ -143,10 +148,8 @@ public class GameBean implements Serializable{
 		this.enemyBullets=new ArrayList<>();
 		this.bloodSupply=new BloodSupply(this);
 		this.weaponsSupplys=new ArrayList<>();
-		this.battleground=new Battleground(this, 
-				Resource.IMAGE_Background, 
-				Resource.MUSIC_bgsound);
-		this.battleground.playBackgroundMusic(null);
+		this.battleground=new Battleground(this, null);
+		this.battleground.playBackgroundMusic(Resource.MUSIC_bgsound);
 		
 		long systemTime=System.currentTimeMillis();
 		
@@ -156,9 +159,31 @@ public class GameBean implements Serializable{
 		this.createBulletSupply02Time=systemTime;
 		this.createBulletSupply03Time=systemTime;
 		this.createBulletSupply04Time=systemTime;
+		this.createBulletSupply05Time=systemTime;
 		this.createBloodSupplyTime=systemTime;
 		this.score=0;
 		this.status=GameBean.STATUS_HOME;
+	}
+	
+	/**
+	 * 是否运行物体移动 
+	 */
+	public boolean allowMove(){
+		return STATUS_GAME==status;
+	}
+	
+	/**
+	 * 获取敌方特殊战机数量 
+	 */
+	public int enemyEspecialCount(){
+		int count=0;
+		for (int i=enemyPlanes.size()-1; i>=0 ; i--) {
+			EnemyPlane ep=enemyPlanes.get(i);
+			if(ep.isEspecial()){
+				count++;
+			}
+		}
+		return count;
 	}
 	
 }

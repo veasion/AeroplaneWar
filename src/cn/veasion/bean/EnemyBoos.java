@@ -79,7 +79,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 	public void sendBullet() {
 		if(System.currentTimeMillis()-sendBulletTime >= Constants.EnemyBulletFrequency/2){
 			EnemyBullet eb=new EnemyBullet(p);
-			eb.create(Resource.IMAGE_Bullet06, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, 15, 15));
+			eb.create(Resource.IMAGE_BossBullet01, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, 15, 15));
 			p.enemyBullets.add(eb);
 			p.battleground.playMusic(Resource.MUSIC_Bullet06);
 			sendBulletTime=System.currentTimeMillis();
@@ -88,7 +88,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 
 	@Override
 	public void move() {
-		if(GameBean.STATUS_GAME == p.status){
+		if(isLive && p.allowMove()){
 			if(r.y>=120){
 				if(flag){
 					r.x-=velocity;

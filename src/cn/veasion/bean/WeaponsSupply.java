@@ -18,6 +18,7 @@ public class WeaponsSupply implements Supply, Serializable{
 	public final static int TYPE_BulletSupply02=2;
 	public final static int TYPE_BulletSupply03=3;
 	public final static int TYPE_BulletSupply04=4;
+	public final static int TYPE_BulletSupply05=5;
 	
 	private GameBean p;
 	private boolean isLive;
@@ -53,9 +54,11 @@ public class WeaponsSupply implements Supply, Serializable{
 	
 	@Override
 	public void move() {
-		r.y+=5;
-		if(r.y>p.containerHeight){
-			this.isLive=false;
+		if(isLive && p.allowMove()){
+			r.y+=5;
+			if(r.y>p.containerHeight){
+				this.isLive=false;
+			}
 		}
 	}
 
@@ -72,6 +75,9 @@ public class WeaponsSupply implements Supply, Serializable{
 					break;
 				case TYPE_BulletSupply04:
 					p.myPlane.useBullet04+=this.value;
+					break;
+				case TYPE_BulletSupply05:
+					p.myPlane.useBullet05+=this.value;
 					break;
 				default:
 					break;

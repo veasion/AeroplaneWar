@@ -37,6 +37,7 @@ public class MyPlane implements Plane, Serializable{
 	public int useBullet02;
 	public int useBullet03;
 	public int useBullet04;
+	public int useBullet05;
 	
 	public MyPlane(GameBean p) {
 		this.p=p;
@@ -56,6 +57,7 @@ public class MyPlane implements Plane, Serializable{
 		useBullet02=0;
 		useBullet03=0;
 		useBullet04=0;
+		useBullet05=0;
 	}
 
 	@Override
@@ -87,6 +89,14 @@ public class MyPlane implements Plane, Serializable{
 			g.setColor(Color.white);
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet04), bx+size+10, by+size/2+5);
+			by-=size+5;
+		}
+		if(useBullet05>0){
+			g.drawImage(Resource.IMAGE_BulletSupply05, bx, by, size, size, null);
+			g.setColor(Color.white);
+			g.setFont(new Font("黑体", Font.BOLD, size/2));
+			g.drawString(String.valueOf(useBullet05), bx+size+10, by+size/2+5);
+			by-=size+5;
 		}
 		if(this.blood<=28){
 			g.setColor(Color.red);
@@ -105,9 +115,21 @@ public class MyPlane implements Plane, Serializable{
 	public void sendBullet() {
 		if(isLive && System.currentTimeMillis()-sendBulletTime > Constants.MyBulletFrequency){
 			int power=Constants.MyBulletPower;
-			if(useBullet04 > 0){
-				MyBullet myBullet=new MyBullet(p);
-				myBullet.create(Resource.IMAGE_Bullet04, power*2, new Rectangle(0, 500, 400, 50));
+			if(useBullet05 > 0){
+				MyBullet myBullet1=new MyBullet(p, true);
+				MyBullet myBullet2=new MyBullet(p, true);
+				MyBullet myBullet3=new MyBullet(p, true);
+				myBullet1.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x-25, r.y-40, 50, 50));
+				p.myBullets.add(myBullet1);
+				myBullet2.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x+10, r.y-40, 50, 50));
+				p.myBullets.add(myBullet2);
+				myBullet3.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x+45, r.y-40, 50, 50));
+				p.myBullets.add(myBullet3);
+				p.battleground.playMusic(Resource.MUSIC_Bullet02);
+				useBullet05-=3;
+			}else if(useBullet04 > 0){
+				MyBullet myBullet=new MyBullet(p, true);
+				myBullet.create(Resource.IMAGE_MyBullet04, power*2, new Rectangle(0, 500, 400, 50));
 				p.myBullets.add(myBullet);
 				p.battleground.playMusic(Resource.MUSIC_Bullet04);
 				useBullet04--;
@@ -115,9 +137,9 @@ public class MyPlane implements Plane, Serializable{
 				MyBullet myBullet1=new MyBullet(p);
 				MyBullet myBullet2=new MyBullet(p);
 				MyBullet myBullet3=new MyBullet(p);
-				myBullet1.create(Resource.IMAGE_Bullet03, power, new Rectangle(r.x-15, r.y-40, 25, 25));
-				myBullet2.create(Resource.IMAGE_Bullet03, power, new Rectangle(r.x+70, r.y-40, 25, 25));
-				myBullet3.create(Resource.IMAGE_Bullet03, power, new Rectangle(r.x+30, r.y-40, 25, 25));
+				myBullet1.create(Resource.IMAGE_MyBullet03, power, new Rectangle(r.x-15, r.y-40, 25, 25));
+				myBullet2.create(Resource.IMAGE_MyBullet03, power, new Rectangle(r.x+70, r.y-40, 25, 25));
+				myBullet3.create(Resource.IMAGE_MyBullet03, power, new Rectangle(r.x+30, r.y-40, 25, 25));
 				p.myBullets.add(myBullet1);
 				p.myBullets.add(myBullet2);
 				p.myBullets.add(myBullet3);
@@ -126,15 +148,15 @@ public class MyPlane implements Plane, Serializable{
 			}else if(useBullet02 >0){
 				MyBullet myBullet1=new MyBullet(p);
 				MyBullet myBullet2=new MyBullet(p);
-				myBullet1.create(Resource.IMAGE_Bullet02, power, new Rectangle(r.x+10, r.y-40, 15, 25));
-				myBullet2.create(Resource.IMAGE_Bullet02, power, new Rectangle(r.x+60, r.y-40, 15, 25));
+				myBullet1.create(Resource.IMAGE_MyBullet02, power, new Rectangle(r.x+10, r.y-40, 15, 25));
+				myBullet2.create(Resource.IMAGE_MyBullet02, power, new Rectangle(r.x+60, r.y-40, 15, 25));
 				p.myBullets.add(myBullet1);
 				p.myBullets.add(myBullet2);
 				p.battleground.playMusic(Resource.MUSIC_Bullet02);
 				useBullet02-=2;
 			}else{
 				MyBullet myBullet=new MyBullet(p);
-				myBullet.create(Resource.IMAGE_Bullet01, power, new Rectangle(r.x+35, r.y-40, 15, 25));
+				myBullet.create(Resource.IMAGE_MyBullet01, power, new Rectangle(r.x+35, r.y-40, 15, 25));
 				p.myBullets.add(myBullet);
 				p.battleground.playMusic(Resource.MUSIC_Bullet01);
 			}
@@ -145,7 +167,7 @@ public class MyPlane implements Plane, Serializable{
 	@Override
 	public void move() {
 		int distance=Constants.MyPlaneVelocity;
-		if(isLive && GameBean.STATUS_GAME == p.status){
+		if(isLive && p.allowMove()){
 			if(isUp){
 				r.y-=distance;
 				if(isLeft){
@@ -244,7 +266,9 @@ public class MyPlane implements Plane, Serializable{
 	@Override
 	public void addBlood(int addBlood){
 		this.blood=this.blood+addBlood;
-		if(this.blood<=0){
+		if(Constants.isUndead){
+			// 不死之身
+		}else if(this.blood<=0){
 			this.blood=0;
 			this.isLive=false;
 			p.status=GameBean.STATUS_OVER;

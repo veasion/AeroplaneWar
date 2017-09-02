@@ -26,4 +26,11 @@ public class VeaUtil {
 		return item[random(0, item.length-1)];
 	}
 	
+	/**
+	 * 随机元素
+	 */
+	public static int random(int [] item){
+		return item[random(0, item.length-1)];
+	}
+	
 }
