@@ -8,7 +8,8 @@ import java.io.Serializable;
 import cn.veasion.util.Resource;
 
 /**
- * 爆炸.
+ * 爆炸效果.
+ * 
  * @auto Veasion
  */
 public class Explosion implements Serializable{

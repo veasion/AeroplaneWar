@@ -13,6 +13,7 @@ import cn.veasion.util.VeaUtil;
 
 /**
  * 大Boos.
+ * 
  * @auto Veasion
  */
 public class EnemyBoos implements Plane, Kill, Serializable{
@@ -22,7 +23,9 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 	private GameBean p;
 	private boolean isLive;
 	private Image image;
+	private Image [] images;
 	private Rectangle r;
+	private Image bullet;
 	private int power;
 	private int blood;
 	private boolean flag;
@@ -38,11 +41,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 	
 	@Override
 	public void create(Image image, int blood, Rectangle r) {
-		if(image !=null){
-			this.image=image;
-		}else{
-			this.image=Resource.IMAGE_EnemyBoss01;
-		}
+		this.image=image;
 		this.r=r;
 		this.blood=blood;
 		this.isLive=true;
@@ -51,14 +50,25 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 		this.velocity=VeaUtil.random(1, 3);
 		sendBulletTime=System.currentTimeMillis();
 	}
-
+	
+	public void create(Image []images, Image bullet, int blood, Rectangle r) {
+		this.r=r;
+		this.blood=blood;
+		this.isLive=true;
+		this.power=Constants.EnemyPower*2;
+		this.flag=false;
+		this.images=images;
+		this.bullet=bullet;
+		this.velocity=VeaUtil.random(1, 3);
+		sendBulletTime=System.currentTimeMillis();
+	}
 	@Override
 	public void draw(Graphics g) {
-		if(changeImage){
-			image=Resource.IMAGE_EnemyBoss02;
+		if(images !=null && changeImage && images.length>1){
+			image=images[1];
 			changeImage=false;
-		}else{
-			image=Resource.IMAGE_EnemyBoss01;
+		}else if(images !=null){
+			image=images[0];
 		}
 		g.drawImage(image, r.x, r.y, r.width, r.height, null);
 		this.kill();
@@ -77,9 +87,9 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 
 	@Override
 	public void sendBullet() {
-		if(System.currentTimeMillis()-sendBulletTime >= Constants.EnemyBulletFrequency/2){
+		if(System.currentTimeMillis()-sendBulletTime >= Constants.EnemyBossBulletFrequency){
 			EnemyBullet eb=new EnemyBullet(p);
-			eb.create(Resource.IMAGE_BossBullet01, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, 15, 15));
+			eb.create(bullet, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, 30, 30));
 			p.enemyBullets.add(eb);
 			p.battleground.playMusic(Resource.MUSIC_Bullet06);
 			sendBulletTime=System.currentTimeMillis();

@@ -14,6 +14,7 @@ import cn.veasion.util.Resource;
 
 /**
  * 我方飞机.
+ * 
  * @auto Veasion
  */
 public class MyPlane implements Plane, Serializable{
@@ -30,8 +31,6 @@ public class MyPlane implements Plane, Serializable{
 	private boolean isLeft;
 	private boolean isDown;
 	private boolean isRight;
-	private boolean isEnter;
-	private boolean isEsc;
 	
 	private long sendBulletTime;
 	public int useBullet02;
@@ -101,7 +100,7 @@ public class MyPlane implements Plane, Serializable{
 		if(this.blood<=28){
 			g.setColor(Color.red);
 			g.setFont(new Font("黑体", 0, 18));
-			g.drawString("注意：血量过低！", 250, 75);
+			g.drawString("注意：血量过低！", p.containerWidth-140, 75);
 		}
 		this.move();
 	}
@@ -129,7 +128,7 @@ public class MyPlane implements Plane, Serializable{
 				useBullet05-=3;
 			}else if(useBullet04 > 0){
 				MyBullet myBullet=new MyBullet(p, true);
-				myBullet.create(Resource.IMAGE_MyBullet04, power*2, new Rectangle(0, 500, 400, 50));
+				myBullet.create(Resource.IMAGE_MyBullet04, power*2, new Rectangle(0, r.y-40, p.containerWidth, 50));
 				p.myBullets.add(myBullet);
 				p.battleground.playMusic(Resource.MUSIC_Bullet04);
 				useBullet04--;
@@ -213,22 +212,14 @@ public class MyPlane implements Plane, Serializable{
 	}
 	
 	public void keyPressed(KeyEvent e){
-		
-		int key=updateStatusByEvent(e, true);
-		if(KeyEvent.VK_ENTER==key && GameBean.STATUS_HOME==p.status){
-			p.status=GameBean.STATUS_GAME;
-		}else if(KeyEvent.VK_ESCAPE==key && GameBean.STATUS_OVER==p.status){
-			p.init();
-			p.status=GameBean.STATUS_HOME;
-		}
-		
+		updateDirection(e, true);
 	}
 	
 	public void keyReleased(KeyEvent e){
-		updateStatusByEvent(e, false);
+		updateDirection(e, false);
 	}
 	
-	private int updateStatusByEvent(KeyEvent e, boolean flag){
+	private int updateDirection(KeyEvent e, boolean flag){
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
@@ -245,14 +236,6 @@ public class MyPlane implements Plane, Serializable{
 			case KeyEvent.VK_D:
 			case KeyEvent.VK_RIGHT:
 				this.isRight=flag;
-				break;
-			case KeyEvent.VK_ENTER:
-				this.isEnter=flag;
-				break;
-			case KeyEvent.VK_ESCAPE:
-				this.isEsc=flag;
-				break;
-			default:
 				break;
 		}
 		return e.getKeyCode();
@@ -271,8 +254,7 @@ public class MyPlane implements Plane, Serializable{
 		}else if(this.blood<=0){
 			this.blood=0;
 			this.isLive=false;
-			p.status=GameBean.STATUS_OVER;
-			p.battleground.playMusic(Resource.MUSIC_gameover);;
+			p.setStatus(GameBean.STATUS_OVER);
 		}else if(this.blood<=28){
 			p.battleground.playMusic(Resource.MUSIC_Health_Low);
 		}else if(this.blood>Constants.MyPlaneBlood){

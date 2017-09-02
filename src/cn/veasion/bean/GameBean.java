@@ -7,7 +7,6 @@ import java.util.List;
 
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
-import cn.veasion.util.VeaUtil;
 
 /**
  * 游戏参数.
@@ -24,19 +23,19 @@ public class GameBean implements Serializable{
 	public final static int STATUS_PAUSE = -1; // 暂停
 	
 	/**
-	 * 容器宽度 
+	 * 默认容器宽度 
 	 */
-	public int containerWidth;
+	public int containerWidth=384;
 	
 	/**
-	 * 容器高度
+	 * 默认容器高度
 	 */
-	public int containerHeight;
+	public int containerHeight=562;
 	
 	/**
 	 * 游戏状态
 	 */
-	public int status;
+	private int status=STATUS_HOME;
 	
 	/**
 	 * 得分 
@@ -81,7 +80,7 @@ public class GameBean implements Serializable{
 	/**
 	 * 加血补给箱 
 	 */
-	public BloodSupply bloodSupply;
+	public List<BloodSupply> bloodSupplys;
 	
 	/**
 	 * 战场
@@ -92,6 +91,11 @@ public class GameBean implements Serializable{
 	 * 游戏开始时间
 	 */
 	public long gameStartTime;
+	
+	/**
+	 * 暂停时间
+	 */
+	public long pauseTime;
 	
 	/**
 	 * 创建敌方飞机时间
@@ -124,9 +128,14 @@ public class GameBean implements Serializable{
 	public long createBulletSupply05Time;
 	
 	/**
-	 * 创建加血补给时间
+	 * 创建加血01补给时间
 	 */
-	public long createBloodSupplyTime;
+	public long createBloodSupply01Time;
+	
+	/**
+	 * 创建加血02补给时间
+	 */
+	public long createBloodSupply02Time;
 	
 	/**
 	 * 临时变量
@@ -136,23 +145,27 @@ public class GameBean implements Serializable{
 	/**
 	 * 游戏初始化 
 	 */
-	public void init(){
-		this.myPlane=new MyPlane(this);
-		this.myPlane.create(null, Constants.MyPlaneBlood, new Rectangle(160, 450, 80, 70));
+	private void init(){
 		this.enemyPlanes=new ArrayList<>();
-		EnemyPlane enemyPlane=new EnemyPlane(this);
-		enemyPlane.create(null, Constants.EnemyBlood, new Rectangle(VeaUtil.random(0, 350), -80, 50, 50));
-		this.enemyPlanes.add(enemyPlane);
 		this.explosions=new ArrayList<>();
 		this.myBullets=new ArrayList<>();
 		this.enemyBullets=new ArrayList<>();
-		this.bloodSupply=new BloodSupply(this);
+		this.bloodSupplys=new ArrayList<>();
 		this.weaponsSupplys=new ArrayList<>();
 		this.battleground=new Battleground(this, null);
 		this.battleground.playBackgroundMusic(Resource.MUSIC_bgsound);
-		
+		this.initProducedTime();
+		this.score=0;
+		this.myPlane=new MyPlane(this);
+		this.myPlane.create(null, Constants.MyPlaneBlood, 
+				new Rectangle((containerWidth-80)/2, containerHeight-70-30, 80, 70));
+	}
+	
+	/**
+	 * 制造时间初始化 
+	 */
+	private void initProducedTime(){
 		long systemTime=System.currentTimeMillis();
-		
 		this.gameStartTime=systemTime;
 		this.createEnemyTime=systemTime;
 		this.createBossTime=systemTime;
@@ -160,13 +173,28 @@ public class GameBean implements Serializable{
 		this.createBulletSupply03Time=systemTime;
 		this.createBulletSupply04Time=systemTime;
 		this.createBulletSupply05Time=systemTime;
-		this.createBloodSupplyTime=systemTime;
-		this.score=0;
-		this.status=GameBean.STATUS_HOME;
+		this.createBloodSupply01Time=systemTime;
+		this.createBloodSupply02Time=systemTime;
 	}
 	
 	/**
-	 * 是否运行物体移动 
+	 * 暂停恢复，制造时间恢复
+	 */
+	private void recoverProducedTime(){
+		long pause=System.currentTimeMillis()-this.pauseTime;
+		this.gameStartTime+=pause;
+		this.createEnemyTime+=pause;
+		this.createBossTime+=pause;
+		this.createBulletSupply02Time+=pause;
+		this.createBulletSupply03Time+=pause;
+		this.createBulletSupply04Time+=pause;
+		this.createBulletSupply05Time+=pause;
+		this.createBloodSupply01Time+=pause;
+		this.createBloodSupply02Time+=pause;
+	}
+	
+	/**
+	 * 是否允许移动 
 	 */
 	public boolean allowMove(){
 		return STATUS_GAME==status;
@@ -184,6 +212,35 @@ public class GameBean implements Serializable{
 			}
 		}
 		return count;
+	}
+	
+	/**
+	 * 游戏状态
+	 */
+	public int getStatus() {
+		return status;
+	}
+	
+	/**
+	 * 游戏状态
+	 */
+	public void setStatus(int status) {
+		if(status==STATUS_HOME){
+			// 初始化游戏
+			this.init();
+		}else if(status==STATUS_GAME){
+			if(this.status==STATUS_PAUSE){
+				// 继续游戏
+				this.recoverProducedTime();
+			}
+		}else if(status==STATUS_OVER){
+			// 游戏结束
+			this.battleground.playMusic(Resource.MUSIC_gameover);
+		}else if(status==STATUS_PAUSE){
+			// 暂停
+			this.pauseTime=System.currentTimeMillis();
+		}
+		this.status = status;
 	}
 	
 }

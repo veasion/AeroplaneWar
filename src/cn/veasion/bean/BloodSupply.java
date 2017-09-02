@@ -10,6 +10,7 @@ import cn.veasion.util.Resource;
 
 /**
  * 血量补给箱.
+ * 
  * @auto Veasion
  */
 public class BloodSupply implements Supply, Serializable{
@@ -30,11 +31,7 @@ public class BloodSupply implements Supply, Serializable{
 	
 	@Override
 	public void create(Image image, int value, int type, Rectangle r) {
-		if(image != null){
-			this.image=image;
-		}else{
-			this.image=Resource.IMAGE_BloodSupply;
-		}
+		this.image=image;
 		this.r=r;
 		this.value=value;
 		this.isLive=true;

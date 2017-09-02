@@ -4,11 +4,12 @@ import java.util.Random;
 
 /**
  * 帮助类.
+ * 
  * @auto Veasion
  */
 public class VeaUtil {
 
-	static Random random=new Random();
+	private static Random random=new Random();
 	
 	/**
 	 * 随机数字

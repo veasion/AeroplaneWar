@@ -13,6 +13,7 @@ import cn.veasion.util.VeaUtil;
 
 /**
  * 敌方飞机.
+ * 
  * @auto Veasion
  */
 public class EnemyPlane implements Plane, Kill, Serializable{
@@ -96,7 +97,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	private void commonMove(){
 		for (int i = 0, len=p.enemyPlanes.size(); i < len; i++) {
 			EnemyPlane ep=p.enemyPlanes.get(i);
-			if(ep!=this && this.area().intersects(ep.area())){
+			if(ep!=null && ep!=this && this.area().intersects(ep.area())){
 				if(toLeft){
 					r.x-=Constants.EnemyPlaneVelocity;
 					if(r.x<=0){

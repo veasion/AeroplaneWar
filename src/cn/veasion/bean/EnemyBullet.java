@@ -12,6 +12,7 @@ import cn.veasion.util.VeaUtil;
 
 /**
  * 敌方子弹.
+ * 
  * @auto Veasion
  */
 public class EnemyBullet implements Bullet, Serializable{

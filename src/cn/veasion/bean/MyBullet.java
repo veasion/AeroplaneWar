@@ -11,6 +11,7 @@ import cn.veasion.util.Resource;
 
 /**
  * 我方子弹.
+ * 
  * @auto Veasion
  */
 public class MyBullet implements Bullet, Serializable{

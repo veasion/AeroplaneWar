@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 
 /**
  * 飞机接口.
+ * 
  * @auto Veasion
  */
 public interface Plane {

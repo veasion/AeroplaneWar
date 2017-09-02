@@ -3,23 +3,26 @@ package cn.veasion.action;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
+import cn.veasion.bean.BloodSupply;
 import cn.veasion.bean.EnemyBullet;
 import cn.veasion.bean.EnemyPlane;
 import cn.veasion.bean.Explosion;
 import cn.veasion.bean.GameBean;
 import cn.veasion.bean.MyBullet;
 import cn.veasion.bean.WeaponsSupply;
+import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
 
 /**
  * 飞机大战画板核心类.
+ * 
  * @auto Veasion
  */
 public class PlaneAction extends JPanel{
@@ -36,12 +39,22 @@ public class PlaneAction extends JPanel{
 	 * 初始化
 	 */
 	void init() throws Exception{
-		// 初始化游戏参数
-		p.init();
 		// 添加按键监听
 		this.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) { }
 			public void keyReleased(KeyEvent e) {
+				int key=e.getKeyCode();
+				if(key==KeyEvent.VK_ENTER){
+					if(p.getStatus()==GameBean.STATUS_HOME){
+						p.setStatus(GameBean.STATUS_GAME);
+					}else if(p.getStatus()==GameBean.STATUS_GAME){
+						p.setStatus(GameBean.STATUS_PAUSE);
+					}else if(p.getStatus()==GameBean.STATUS_PAUSE){
+						p.setStatus(GameBean.STATUS_GAME);
+					}
+				}else if(key==KeyEvent.VK_ESCAPE && p.getStatus()==GameBean.STATUS_OVER){
+					p.setStatus(GameBean.STATUS_HOME);
+				}
 				p.myPlane.keyReleased(e);
 			}
 			public void keyPressed(KeyEvent e) {
@@ -53,27 +66,45 @@ public class PlaneAction extends JPanel{
 			public void componentResized(ComponentEvent e) {
 				p.containerWidth=e.getComponent().getWidth();
 				p.containerHeight=e.getComponent().getHeight();
+				if(p.getStatus()==GameBean.STATUS_HOME){
+					p.myPlane.create(null, Constants.MyPlaneBlood, 
+							new Rectangle((p.containerWidth-80)/2, p.containerHeight-70-30, 80, 70));
+				}else if(p.getStatus()==GameBean.STATUS_PAUSE){
+					p.setStatus(GameBean.STATUS_GAME);
+				}
 			}
 		});
+		// 初始化游戏参数
+		p.setStatus(GameBean.STATUS_HOME);
+		// 启动制造线程
 		ProducedThread pt=new ProducedThread(p);
 		pt.start();
 	}
 	
 	@Override
 	public void paint(Graphics g) {
-		// 清除上一帧
-		super.paint(g);
-		// 背景
-		p.battleground.draw(g);
-		if(p.status == GameBean.STATUS_HOME){
+		if(p.getStatus() == GameBean.STATUS_HOME){
+			// 清除上一帧
+			super.paint(g);
+			// 背景
+			p.battleground.draw(g);
 			this.paintHome(g);
-		}else if(p.status == GameBean.STATUS_GAME){
+		}else if(p.getStatus() == GameBean.STATUS_GAME){
+			// 清除上一帧
+			super.paint(g);
+			// 背景
+			p.battleground.draw(g);
 			this.paintGame(g);
-		}else if(p.status == GameBean.STATUS_OVER){
+		}else if(p.getStatus() == GameBean.STATUS_OVER){
+			// 清除上一帧
+			super.paint(g);
+			// 背景
+			p.battleground.draw(g);
 			this.paintGameOver(g);
-		}else if(p.status == GameBean.STATUS_PAUSE){
+		}else if(p.getStatus() == GameBean.STATUS_PAUSE){
 			this.paintGamePause(g);
 		}
+		
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
@@ -90,28 +121,16 @@ public class PlaneAction extends JPanel{
 		g.setColor(Color.ORANGE);
 		g.setFont(new Font("楷体", Font.BOLD, 30));
 		g.drawString("伟神", (int)(getWidth()/2-30), 30+25);
-		g.drawImage(Resource.IMAGE_Title, 30, 220, 350, 140, null);
-		g.drawImage(Resource.IMAGE_Title_Tips, 30, 450, 340, 80, null);
-		
-		Image [] rocketImages=Resource.IMAGE_Rockets;
+		g.drawImage(Resource.IMAGE_Title, (p.containerWidth-350)/2, (p.containerHeight-140)/2, 350, 140, null);
+		g.drawImage(Resource.IMAGE_Title_Tips, (p.containerWidth-350)/2, p.containerHeight-120, 340, 80, null);
+		// 绘制移动小飞机
 		p.temp += 2;
 		int count=p.temp/20;
-		if(count<=rocketImages.length){
-			for (int i = 0; i < count; i++) {
-				int index=count-i-1;
-				int width= index==0 ? 70 : 50;
-				int height= index==0 ? 40 : 50;
-				g.drawImage(rocketImages[index], i*100+20, 100, width, height, null);
-			}
-		}else{
-			for (int i = count-rocketImages.length; i < rocketImages.length; i++) {
-				int index=count-i-1;
-				int width= index==0 ? 70 : 50;
-				int height= index==0 ? 40 : 50;
-				g.drawImage(rocketImages[index], i*100+20, 100, width, height, null);
-			}
-		}
-		if(p.temp >= p.containerWidth){
+		g.drawImage(Resource.IMAGE_Rocket, count*100+20, 100, 70, 40, null);
+		g.drawImage(Resource.IMAGE_RocketFly01, (count-1)*100+20, 100, 50, 50, null);
+		g.drawImage(Resource.IMAGE_RocketFly02, (count-2)*100+20, 100, 50, 50, null);
+		g.drawImage(Resource.IMAGE_RocketFly03, (count-3)*100+20, 100, 50, 50, null);
+		if((count-3)*100+20 >= p.containerWidth){
 			p.temp=0;
 		}
 	}
@@ -172,12 +191,13 @@ public class PlaneAction extends JPanel{
 			}
 		}
 		// 加血补给箱
-		if(p.bloodSupply!=null){
-			if(p.bloodSupply.isLive()){
-				p.bloodSupply.draw(g);
+		for (int i =p.bloodSupplys.size()-1; i>=0 ; i--) {
+			BloodSupply bs=p.bloodSupplys.get(i);
+			if(bs.isLive()){
+				bs.draw(g);
 			}
-			if(!p.bloodSupply.isLive()){
-				p.bloodSupply=null;
+			if(!bs.isLive()){
+				p.bloodSupplys.remove(i);
 			}
 		}
 		// 武器补给箱
@@ -195,59 +215,77 @@ public class PlaneAction extends JPanel{
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("分数："+p.score, 32, 50);
-		g.drawString("生命值：", 182, 50);
-		
 		//绘制分数
 		g.setColor(Color.white);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("分数："+p.score, 30, 48);
-		g.drawString("生命值：", 180, 48);
+		
+		//绘制生命值阴影
+		g.setColor(Color.black);
+		g.setFont(new Font("黑体", Font.PLAIN, 24));
+		g.drawString("生命值：", p.containerWidth-202, 50);
+		//绘制生命值
+		g.setColor(Color.white);
+		g.setFont(new Font("黑体", Font.PLAIN, 24));
+		g.drawString("生命值：", p.containerWidth-204, 48);
 		
 		//绘制空心血条方框
 		g.setColor(new Color(190,195,199));
-		g.drawRect(275, 30, 101, 18);
+		g.drawRect(p.containerWidth-109, 30, 101, 18);
 		
 		//绘制实心血条方框
 		g.setColor(new Color(234, 75, 53));
-		g.fillRect(276, 31, p.myPlane.getBlood(), 17);
+		g.fillRect(p.containerWidth-108, 31, p.myPlane.getBlood(), 17);
 		
 		//绘制血条数值阴影
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.PLAIN, 16));
-		g.drawString(String.valueOf(p.myPlane.getBlood()), 317, 47);
+		g.drawString(String.valueOf(p.myPlane.getBlood()), p.containerWidth-67, 47);
 		
 		//绘制血条数值
 		g.setColor(Color.white);
 		g.setFont(new Font("黑体", Font.PLAIN, 16));
-		g.drawString(String.valueOf(p.myPlane.getBlood()), 315, 45);
+		g.drawString(String.valueOf(p.myPlane.getBlood()), p.containerWidth-69, 45);
+		
+		//绘制时间
+		g.setFont(new Font("黑体", 0, 16));
+		String time=String.valueOf(System.currentTimeMillis()-p.gameStartTime);
+		g.drawString(time, p.containerWidth-8-time.length()*8, p.containerHeight-8);
 	}
 	
 	/**
 	 * 暂停界面 
 	 */
 	private void paintGamePause(Graphics g){
-		// TODO 游戏暂停
+		g.setColor(Color.black);
+		g.setFont(new Font("楷体", 1, 40));
+		g.drawString("请按Enter继续游戏", (p.containerWidth-40*9)/2+2, p.containerHeight/2-20);
+		g.setColor(Color.white);
+		g.setFont(new Font("楷体", 1, 40));
+		g.drawString("请按Enter继续游戏", (p.containerWidth-40*9)/2, p.containerHeight/2-20);
 	}
 	
 	/**
 	 * 绘制游戏结束界面 
 	 */
 	private void paintGameOver(Graphics g){
-		g.drawImage(Resource.IMAGE_GameOver, 30, 60, 350, 140, null);
+		//----------
+		g.drawImage(Resource.IMAGE_GameOver, (p.containerWidth-350)/2, 60, 350, 140, null);
 		//绘制结束时分数显示阴影
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.PLAIN, 36));
-		g.drawString(p.score+"分", 147, 292);
+		String score=p.score+"分";
+		g.drawString(score, (p.containerWidth-score.length()*18)/2+2, 292);
 		//绘制结束时分数显示
 		g.setColor(Color.white);
-		g.drawString(p.score+"分", 145, 290);
+		g.drawString(score, (p.containerWidth-score.length()*18)/2, 290);
 		//绘制结束时评价显示阴影
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.BOLD, 40));
-		g.drawString("评价：", 77, 387);
+		g.drawString("评价：", p.containerWidth/2-40*3+10, 387);
 		//绘制结束时评价显示
 		g.setColor(Color.white);
-		g.drawString("评价：", 75, 385);
+		g.drawString("评价：", p.containerWidth/2-40*3+8, 385);
 		
 		String appraise="";
 		int [] scores={ 500, 1200, 3000, 4200, 5500, 6800, 8000, 9500, 16000};
@@ -263,10 +301,10 @@ public class PlaneAction extends JPanel{
 		}
 		g.setColor(Color.black);
 		g.setFont(new Font("黑体", Font.BOLD, 80));
-		g.drawString(appraise, 238, 397);
+		g.drawString(appraise, p.containerWidth/2+60+2, 397);
 		g.setColor(Color.white);
-		g.drawString(appraise, 236, 395);
-		g.drawImage(Resource.IMAGE_GameOver_Tips, 30, 470, 340, 80, null);
+		g.drawString(appraise, p.containerWidth/2+60, 395);
+		g.drawImage(Resource.IMAGE_GameOver_Tips, (p.containerWidth-340)/2, p.containerHeight-100, 340, 80, null);
 	}
 	
 }

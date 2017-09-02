@@ -10,6 +10,7 @@ import cn.veasion.util.Resource;
 
 /**
  * 武器补给箱.
+ * 
  * @auto Veasion
  */
 public class WeaponsSupply implements Supply, Serializable{

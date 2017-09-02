@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 /**
  * 补给接口.
+ * 
  * @auto Veasion
  */
 public interface Supply {

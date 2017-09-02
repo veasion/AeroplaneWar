@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileSystemView;
 
 /**
  * 资源帮助类.
+ * 
  * @author Veasion
  */
 public class ResourceUtil {

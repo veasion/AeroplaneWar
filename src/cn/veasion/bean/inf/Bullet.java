@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 /**
  * 子弹接口.
+ * 
  * @auto Veasion
  */
 public interface Bullet extends Kill{

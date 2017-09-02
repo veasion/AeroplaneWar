@@ -4,12 +4,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 
+import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
 import cn.veasion.util.VeaUtil;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
 /**
  * 战场.
+ * 
  * @auto Veasion
  */
 public class Battleground implements Serializable{
@@ -24,8 +26,12 @@ public class Battleground implements Serializable{
 	public static final int TYPE_GREEN_MOUNT=3;// 青山绿水
 	/**沙漠风暴*/
 	public static final int TYPE_DESERT_STORM=4;//沙漠风暴
+	/**空中天柱*/
+	public static final int TYPE_SKY_PILLAR=5;//空中天柱
+	/**深渊桥*/
+	public static final int TYPE_ABYSS_BRIDGE=6;//深渊桥
 	
-	public static final int [] TYPES={TYPE_BLUE_STARS, TYPE_FIRE_MOUNT, TYPE_GREEN_MOUNT, TYPE_DESERT_STORM};
+	public static final int [] TYPES={TYPE_BLUE_STARS, TYPE_FIRE_MOUNT, TYPE_GREEN_MOUNT, TYPE_DESERT_STORM, TYPE_SKY_PILLAR, TYPE_ABYSS_BRIDGE};
 	
 	private BgMusicThread thread;
 	private GameBean p;
@@ -56,6 +62,14 @@ public class Battleground implements Serializable{
 				this.isUp=true;
 				this.bgImage=Resource.IMAGE_Background4;
 				break;
+			case TYPE_SKY_PILLAR:
+				this.isUp=false;
+				this.bgImage=Resource.IMAGE_Background5;
+				break;
+			case TYPE_ABYSS_BRIDGE:
+				this.isUp=true;
+				this.bgImage=Resource.IMAGE_Background6;
+				break;
 		}
 		this.p=p;
 	}
@@ -68,22 +82,25 @@ public class Battleground implements Serializable{
 	
 	public void draw(Graphics g){
 		// 双背景循环
-		g.drawImage(bgImage, 0, y, null);
-		g.drawImage(bgImage, 0, y>=0 ? y-p.containerHeight : p.containerHeight-Math.abs(y), null);
+		g.drawImage(bgImage, 0, y, p.containerWidth, p.containerHeight, null);
+		g.drawImage(bgImage, 0, y>=0 ? y-p.containerHeight : p.containerHeight-Math.abs(y), p.containerWidth, p.containerHeight, null);
 		this.move();
 	}
 	
 	public void move(){
-		if(isUp){
-			y-=2;
-			if(y<=-p.containerHeight){
-				//y=p.containerHeight;
-				y=0;
-			}
-		}else{
-			y+=2;
-			if(y>=p.containerHeight){
-				y=-p.containerHeight;
+		if(p.getStatus() != GameBean.STATUS_PAUSE){
+			if(isUp){
+				y-=Constants.backgroundMoveVelocity;
+				if(y<=-p.containerHeight){
+					//y=p.containerHeight;
+					y=0;
+				}
+			}else{
+				y+=Constants.backgroundMoveVelocity;
+				if(y>=p.containerHeight){
+					//y=-p.containerHeight;
+					y=0;
+				}
 			}
 		}
 	}
@@ -111,9 +128,8 @@ public class Battleground implements Serializable{
 	
 	class BgMusicThread extends Thread{
 		AdvancedPlayer music;
-		@Override
 		public void run() {
-			while(true){
+			while(p.getStatus() != GameBean.STATUS_PAUSE){
 				try {
 					music = new AdvancedPlayer(getClass().getResourceAsStream(bgMusicPath));
 					music.play();
