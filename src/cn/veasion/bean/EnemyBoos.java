@@ -89,7 +89,11 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 	public void sendBullet() {
 		if(System.currentTimeMillis()-sendBulletTime >= Constants.EnemyBossBulletFrequency){
 			EnemyBullet eb=new EnemyBullet(p);
-			eb.create(bullet, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, 30, 30));
+			int w=30,h=40;
+			if(bullet==Resource.IMAGE_BossBullet02){
+				w=15;h=28;
+			}
+			eb.create(bullet, Constants.EnemyPower*2, new Rectangle(r.x+30, r.y+60, w, h));
 			p.enemyBullets.add(eb);
 			p.battleground.playMusic(Resource.MUSIC_Bullet06);
 			sendBulletTime=System.currentTimeMillis();

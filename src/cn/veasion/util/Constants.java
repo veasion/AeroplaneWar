@@ -1,5 +1,7 @@
 package cn.veasion.util;
 
+import java.awt.Color;
+
 /**
  * 常量.
  * 
@@ -127,5 +129,19 @@ public class Constants {
 	 * 生产超级武器05补给默认频率 
 	 */
 	public static int CreateBulletSupply05Frequency=59000;
+	
+	
+	//=============== 其它默认变量  ===============\\
+	
+	/**
+	 * 绘画阴影默认颜色 
+	 */
+	public static Color shadeDefaultColor=Color.black;
+	
+	/**
+	 * 绘画正体默认颜色 
+	 */
+	public static Color itselfDefaultColor=Color.white;
+	
 	
 }

@@ -1,5 +1,6 @@
 package cn.veasion.bean;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
+import cn.veasion.util.VeaUtil;
 
 /**
  * 游戏参数.
@@ -154,11 +156,11 @@ public class GameBean implements Serializable{
 		this.bloodSupplys=new ArrayList<>();
 		this.weaponsSupplys=new ArrayList<>();
 		this.battleground=new Battleground(this, null);
-		this.battleground.playBackgroundMusic(Resource.MUSIC_bgsound);
+		this.battleground.playBackgroundMusic(VeaUtil.random(Resource.MUSIC_bgsounds));
 		this.initProducedTime();
 		this.score=0;
 		this.myPlane=new MyPlane(this);
-		this.firstReadObjFile=false;
+		this.firstReadObjFile=true;
 		this.myPlane.create(null, Constants.MyPlaneBlood, 
 				new Rectangle((containerWidth-80)/2, containerHeight-70-30, 80, 70));
 	}
@@ -243,6 +245,22 @@ public class GameBean implements Serializable{
 			this.pauseTime=System.currentTimeMillis();
 		}
 		this.status = status;
+	}
+	
+	/**
+	 * 改变绘画主体颜色为白色 
+	 */
+	public static void changeItselfToWhite(){
+		Constants.shadeDefaultColor=Color.black;
+		Constants.itselfDefaultColor=Color.white;
+	}
+	
+	/**
+	 * 改变绘画主体颜色为黑色
+	 */
+	public static void changeItselfToBlack(){
+		Constants.shadeDefaultColor=Color.lightGray;
+		Constants.itselfDefaultColor=Color.black;
 	}
 	
 }

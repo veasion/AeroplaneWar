@@ -11,6 +11,7 @@ import java.io.Serializable;
 import cn.veasion.bean.inf.Plane;
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
+import cn.veasion.util.VeaUtil;
 
 /**
  * 我方飞机.
@@ -71,28 +72,28 @@ public class MyPlane implements Plane, Serializable{
 		int by=p.containerHeight-size-2;
 		if(useBullet02>0){
 			g.drawImage(Resource.IMAGE_BulletSupply02, bx, by, size, size, null);
-			g.setColor(Color.white);
+			g.setColor(Constants.itselfDefaultColor);
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet02), bx+size+10, by+size/2+5);
 			by-=size+5;
 		}
 		if(useBullet03>0){
 			g.drawImage(Resource.IMAGE_BulletSupply03, bx, by, size, size, null);
-			g.setColor(Color.white);
+			g.setColor(Constants.itselfDefaultColor);
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet03), bx+size+10, by+size/2+5);
 			by-=size+5;
 		}
 		if(useBullet04>0){
 			g.drawImage(Resource.IMAGE_BulletSupply04, bx, by, size, size, null);
-			g.setColor(Color.white);
+			g.setColor(Constants.itselfDefaultColor);
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet04), bx+size+10, by+size/2+5);
 			by-=size+5;
 		}
 		if(useBullet05>0){
 			g.drawImage(Resource.IMAGE_BulletSupply05, bx, by, size, size, null);
-			g.setColor(Color.white);
+			g.setColor(Constants.itselfDefaultColor);
 			g.setFont(new Font("黑体", Font.BOLD, size/2));
 			g.drawString(String.valueOf(useBullet05), bx+size+10, by+size/2+5);
 			by-=size+5;
@@ -118,11 +119,12 @@ public class MyPlane implements Plane, Serializable{
 				MyBullet myBullet1=new MyBullet(p, true);
 				MyBullet myBullet2=new MyBullet(p, true);
 				MyBullet myBullet3=new MyBullet(p, true);
-				myBullet1.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x-25, r.y-40, 50, 50));
+				Image [] bullet=VeaUtil.random(new Image[][]{Resource.IMAGE_MyBullet05_1, Resource.IMAGE_MyBullet05_2});
+				myBullet1.create(bullet, power*2, new Rectangle(r.x-25, r.y-40, 50, 50));
 				p.myBullets.add(myBullet1);
-				myBullet2.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x+10, r.y-40, 50, 50));
+				myBullet2.create(bullet, power*2, new Rectangle(r.x+10, r.y-40, 50, 50));
 				p.myBullets.add(myBullet2);
-				myBullet3.create(Resource.IMAGE_MyBullet05, power*2, new Rectangle(r.x+45, r.y-40, 50, 50));
+				myBullet3.create(bullet, power*2, new Rectangle(r.x+45, r.y-40, 50, 50));
 				p.myBullets.add(myBullet3);
 				p.battleground.playMusic(Resource.MUSIC_Bullet02);
 				useBullet05-=3;

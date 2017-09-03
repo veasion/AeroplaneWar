@@ -1,13 +1,14 @@
 package cn.veasion.bean;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 
 import cn.veasion.util.Constants;
 import cn.veasion.util.Resource;
+import cn.veasion.util.ResourceUtil;
 import cn.veasion.util.VeaUtil;
-import javazoom.jl.player.advanced.AdvancedPlayer;
 
 /**
  * 战场.
@@ -30,47 +31,33 @@ public class Battleground implements Serializable{
 	public static final int TYPE_SKY_PILLAR=5;//空中天柱
 	/**深渊桥*/
 	public static final int TYPE_ABYSS_BRIDGE=6;//深渊桥
+	/**漫天云层*/
+	public static final int TYPE_CLOUD_LAYER=7;//漫天云层
+	/**星际天空*/
+	public static final int TYPE_STAR_SKY=8;//星际天空
+	/**路边小村*/
+	public static final int TYPE_ROAD_VILLAGE=9;//路边小村
 	
-	public static final int [] TYPES={TYPE_BLUE_STARS, TYPE_FIRE_MOUNT, TYPE_GREEN_MOUNT, TYPE_DESERT_STORM, TYPE_SKY_PILLAR, TYPE_ABYSS_BRIDGE};
+	/**
+	 * 战场类型数组
+	 */
+	public static final int [] TYPES={
+			TYPE_BLUE_STARS, TYPE_FIRE_MOUNT,
+			TYPE_GREEN_MOUNT, TYPE_DESERT_STORM,
+			TYPE_SKY_PILLAR, TYPE_ABYSS_BRIDGE,
+			TYPE_CLOUD_LAYER, TYPE_STAR_SKY, TYPE_ROAD_VILLAGE};
 	
 	private BgMusicThread thread;
 	private GameBean p;
 	private Image bgImage;
+	private Image [] bgImages;
+	private int index;
 	private String bgMusicPath;
 	private boolean isUp;
 	private int y=0;
 	
 	public Battleground(GameBean p, Integer type){
-		if(type==null){
-			type=VeaUtil.random(TYPES);
-		}
-		switch (type) {
-			default:
-			case TYPE_BLUE_STARS:
-				this.isUp=false;
-				this.bgImage=Resource.IMAGE_Background1;
-				break;
-			case TYPE_FIRE_MOUNT:
-				this.isUp=true;
-				this.bgImage=Resource.IMAGE_Background2;
-				break;
-			case TYPE_GREEN_MOUNT:
-				this.isUp=true;
-				this.bgImage=Resource.IMAGE_Background3;
-				break;
-			case TYPE_DESERT_STORM:
-				this.isUp=true;
-				this.bgImage=Resource.IMAGE_Background4;
-				break;
-			case TYPE_SKY_PILLAR:
-				this.isUp=false;
-				this.bgImage=Resource.IMAGE_Background5;
-				break;
-			case TYPE_ABYSS_BRIDGE:
-				this.isUp=true;
-				this.bgImage=Resource.IMAGE_Background6;
-				break;
-		}
+		this.changeBackground(type);
 		this.p=p;
 	}
 	
@@ -80,10 +67,24 @@ public class Battleground implements Serializable{
 		this.isUp=isUp;
 	}
 	
+	public Battleground(GameBean p, boolean isUp, Image [] bgImages){
+		this.p=p;
+		this.bgImages=bgImages;
+		this.isUp=isUp;
+	}
+	
 	public void draw(Graphics g){
-		// 双背景循环
-		g.drawImage(bgImage, 0, y, p.containerWidth, p.containerHeight, null);
-		g.drawImage(bgImage, 0, y>=0 ? y-p.containerHeight : p.containerHeight-Math.abs(y), p.containerWidth, p.containerHeight, null);
+		
+		if(this.bgImages==null){
+			// 单背景双循环
+			g.drawImage(bgImage, 0, y, p.containerWidth, p.containerHeight, null);
+			g.drawImage(bgImage, 0, y>=0 ? y-p.containerHeight : p.containerHeight-Math.abs(y), p.containerWidth, p.containerHeight, null);
+		}else{
+			// 背景数组循环
+			g.drawImage(bgImages[index], 0, y, p.containerWidth, p.containerHeight, null);
+			g.drawImage(bgImages[index < bgImages.length-1 ? index+1 : 0], 0, isUp ? p.containerHeight-Math.abs(y) : y-p.containerHeight, p.containerWidth, p.containerHeight, null);
+		}
+		
 		this.move();
 	}
 	
@@ -94,19 +95,84 @@ public class Battleground implements Serializable{
 				if(y<=-p.containerHeight){
 					//y=p.containerHeight;
 					y=0;
+					if(bgImages!=null){
+						index++;
+						if(index>bgImages.length-1){
+							index=0;
+						}
+					}
 				}
 			}else{
 				y+=Constants.backgroundMoveVelocity;
 				if(y>=p.containerHeight){
 					//y=-p.containerHeight;
 					y=0;
+					if(bgImages!=null){
+						index++;
+						if(index>bgImages.length-1){
+							index=0;
+						}
+					}
 				}
 			}
 		}
 	}
 	
-	public void changeBgImage(Image bgImage){
-		this.bgImage=bgImage;
+	/**
+	 * 改变背景战场 
+	 */
+	public void changeBackground(Integer type){
+		if(type==null){
+			type=VeaUtil.random(TYPES);
+		}
+		switch (type) {
+			default:
+			case TYPE_BLUE_STARS:
+				this.isUp=false;
+				this.bgImage=Resource.IMAGE_Background1;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_FIRE_MOUNT:
+				this.isUp=true;
+				this.bgImage=Resource.IMAGE_Background2;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_GREEN_MOUNT:
+				this.isUp=true;
+				this.bgImage=Resource.IMAGE_Background3;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_DESERT_STORM:
+				this.isUp=true;
+				this.bgImage=Resource.IMAGE_Background4;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_SKY_PILLAR:
+				this.isUp=false;
+				this.bgImage=Resource.IMAGE_Background5;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_ABYSS_BRIDGE:
+				this.isUp=true;
+				this.bgImage=Resource.IMAGE_Background6;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_CLOUD_LAYER:
+				this.isUp=false;
+				this.bgImages=Resource.IMAGE_Background7;
+				GameBean.changeItselfToBlack();
+				break;
+			case TYPE_STAR_SKY:
+				this.isUp=false;
+				this.bgImages=Resource.IMAGE_Background8;
+				GameBean.changeItselfToWhite();
+				break;
+			case TYPE_ROAD_VILLAGE:
+				this.isUp=false;
+				this.bgImages=Resource.IMAGE_Background9;
+				GameBean.changeItselfToBlack();
+				break;
+		}
 	}
 	
 	public void playBackgroundMusic(String bgMusicPath){
@@ -118,21 +184,18 @@ public class Battleground implements Serializable{
 	public void playMusic(final String musicPath){
 		new Thread(()->{
 			try {
-				new AdvancedPlayer(getClass()
-						.getResourceAsStream(musicPath)).play();
+				ResourceUtil.playMusic(musicPath, p);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}).start();;
+		}).start();
 	}
 	
 	class BgMusicThread extends Thread{
-		AdvancedPlayer music;
 		public void run() {
 			while(p.getStatus() != GameBean.STATUS_PAUSE){
 				try {
-					music = new AdvancedPlayer(getClass().getResourceAsStream(bgMusicPath));
-					music.play();
+					ResourceUtil.playMusic(bgMusicPath, p);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.exit(0);

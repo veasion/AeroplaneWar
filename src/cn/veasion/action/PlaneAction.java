@@ -3,6 +3,7 @@ package cn.veasion.action;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -213,20 +214,20 @@ public class PlaneAction extends JPanel{
 		}
 		
 		//绘制分数阴影
-		g.setColor(Color.black);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("分数："+p.score, 32, 50);
 		//绘制分数
-		g.setColor(Color.white);
+		g.setColor(Constants.itselfDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("分数："+p.score, 30, 48);
 		
 		//绘制生命值阴影
-		g.setColor(Color.black);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("生命值：", p.containerWidth-202, 50);
 		//绘制生命值
-		g.setColor(Color.white);
+		g.setColor(Constants.itselfDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 24));
 		g.drawString("生命值：", p.containerWidth-204, 48);
 		
@@ -239,12 +240,12 @@ public class PlaneAction extends JPanel{
 		g.fillRect(p.containerWidth-108, 31, p.myPlane.getBlood(), 17);
 		
 		//绘制血条数值阴影
-		g.setColor(Color.black);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 16));
 		g.drawString(String.valueOf(p.myPlane.getBlood()), p.containerWidth-67, 47);
 		
 		//绘制血条数值
-		g.setColor(Color.white);
+		g.setColor(Constants.itselfDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 16));
 		g.drawString(String.valueOf(p.myPlane.getBlood()), p.containerWidth-69, 45);
 		
@@ -258,10 +259,10 @@ public class PlaneAction extends JPanel{
 	 * 暂停界面 
 	 */
 	private void paintGamePause(Graphics g){
-		g.setColor(Color.black);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("楷体", 1, 40));
 		g.drawString("请按Enter继续游戏", (p.containerWidth-40*9)/2+2, p.containerHeight/2-20);
-		g.setColor(Color.white);
+		g.setColor(Constants.itselfDefaultColor);
 		g.setFont(new Font("楷体", 1, 40));
 		g.drawString("请按Enter继续游戏", (p.containerWidth-40*9)/2, p.containerHeight/2-20);
 	}
@@ -271,7 +272,7 @@ public class PlaneAction extends JPanel{
 	 */
 	private Integer historyScore;
 	private void paintGameOver(Graphics g){
-		if(!p.firstReadObjFile){
+		if(p.firstReadObjFile){
 			try {
 				// 读取历史最高纪录
 				historyScore=VeaUtil.readHistoryRecord();
@@ -286,8 +287,9 @@ public class PlaneAction extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			p.firstReadObjFile=true;
+			p.firstReadObjFile=false;
 		}
+		
 		if(historyScore==null){
 			historyScore=0;
 		}
@@ -297,30 +299,24 @@ public class PlaneAction extends JPanel{
 			g.drawImage(Resource.IMAGE_breakRecord, (p.containerWidth-120)/2, 180, 120, 50, null);
 		}else{
 			// 历史最高纪录
-			g.setColor(Color.black);
+			g.setColor(Constants.shadeDefaultColor);
 			g.setFont(new Font("黑体", Font.BOLD, 24));
 			String historyStr="历史最高纪录："+historyScore+"分";
-			int x=(p.containerWidth-historyStr.length()*(26-String.valueOf(historyScore).length()/2))/2;
-			g.drawString(historyStr, x+2, 220);
-			g.setColor(Color.white);
-			g.drawString(historyStr, x, 220);
+			int x=(p.containerWidth-historyStr.length()*(24-String.valueOf(historyScore).length()/2))/2;
+			g.drawString(historyStr, x+12, 220);
+			g.setColor(Constants.itselfDefaultColor);
+			g.drawString(historyStr, x+10, 220);
 		}
 		//绘制结束时分数显示阴影
-		g.setColor(Color.black);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.PLAIN, 36));
 		String score=p.score+"分";
 		g.drawString(score, (p.containerWidth-score.length()*18)/2+2, 292);
 		//绘制结束时分数显示
-		g.setColor(Color.white);
+		g.setColor(Constants.itselfDefaultColor);
 		g.drawString(score, (p.containerWidth-score.length()*18)/2, 290);
-		//绘制结束时评价显示阴影
-		g.setColor(Color.black);
-		g.setFont(new Font("黑体", Font.BOLD, 40));
-		g.drawString("评价：", p.containerWidth/2-40*3+10, 387);
-		//绘制结束时评价显示
-		g.setColor(Color.white);
-		g.drawString("评价：", p.containerWidth/2-40*3+8, 385);
 		
+		// 计算评价
 		String appraise="";
 		int [] scores={ 500, 1200, 3000, 4200, 5500, 6800, 8000, 9500, 16000};
 		String [] appraises={ "F", "E", "D", "C", "B", "A", "S", "SS", "SSS"};
@@ -333,11 +329,18 @@ public class PlaneAction extends JPanel{
 				appraise="666";
 			}
 		}
-		g.setColor(Color.black);
+		//绘制结束时评价显示阴影
+		g.setColor(Constants.shadeDefaultColor);
+		g.setFont(new Font("黑体", Font.BOLD, 40));
+		g.drawString("评价：", p.containerWidth/2-40*3-appraise.length()*10+20, 387);
+		//绘制结束时评价显示
+		g.setColor(Constants.itselfDefaultColor);
+		g.drawString("评价：", p.containerWidth/2-40*3-appraise.length()*10+18, 385);
+		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.BOLD, 80));
-		g.drawString(appraise, p.containerWidth/2+60+2, 397);
-		g.setColor(Color.white);
-		g.drawString(appraise, p.containerWidth/2+60, 395);
+		g.drawString(appraise, (p.containerWidth-appraise.length()*40)/2+60+2, 397);
+		g.setColor(Constants.itselfDefaultColor);
+		g.drawString(appraise, (p.containerWidth-appraise.length()*40)/2+60, 395);
 		g.drawImage(Resource.IMAGE_GameOver_Tips, (p.containerWidth-340)/2, p.containerHeight-100, 340, 80, null);
 	}
 	

@@ -32,7 +32,21 @@ public class Resource {
 	public final static Image IMAGE_Background4=ResourceUtil.loadImage(IMAGE_PATH+"Background/Background4.jpg");
 	public final static Image IMAGE_Background5=ResourceUtil.loadImage(IMAGE_PATH+"Background/Background5.jpg");
 	public final static Image IMAGE_Background6=ResourceUtil.loadImage(IMAGE_PATH+"Background/Background6.jpg");
-	//public final static Image [] IMAGE_Backgrounds=new Image[]{IMAGE_Background1, IMAGE_Background2, IMAGE_Background3, IMAGE_Background4, IMAGE_Background5, IMAGE_Background6};	
+	public final static Image [] IMAGE_Background7=new Image[]{
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background7_1.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background7_2.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background7_3.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background7_4.jpg")};
+	public final static Image [] IMAGE_Background8=new Image[]{
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background8_1.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background8_2.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background8_3.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background8_4.jpg")};
+	public final static Image [] IMAGE_Background9=new Image[]{
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background9_1.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background9_2.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background9_3.jpg"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Background/Background9_4.jpg")};
 	
 	// 我方图片资源
 	public final static Image IMAGE_Plane=ResourceUtil.loadImage(IMAGE_PATH+"Plane/Plane.png");
@@ -49,11 +63,16 @@ public class Resource {
 	public final static Image IMAGE_MyBullet02=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet02.png");
 	public final static Image IMAGE_MyBullet03=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet03.png");
 	public final static Image IMAGE_MyBullet04=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet04.png");
-	private final static Image IMAGE_MyBullet05_1=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1.png");
-	private final static Image IMAGE_MyBullet05_2=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1.png");
-	private final static Image IMAGE_MyBullet05_3=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1.png");
-	private final static Image IMAGE_MyBullet05_4=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1.png");
-	public final static Image [] IMAGE_MyBullet05=new Image[]{IMAGE_MyBullet05_1, IMAGE_MyBullet05_2, IMAGE_MyBullet05_3, IMAGE_MyBullet05_4};
+	public final static Image [] IMAGE_MyBullet05_1=new Image[]{
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1_1.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1_2.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1_3.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_1_4.png")};
+	public final static Image [] IMAGE_MyBullet05_2=new Image[]{
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_2_1.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_2_2.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_2_3.png"),
+			ResourceUtil.loadImage(IMAGE_PATH+"Bullet/MyBullet05_2_4.png")};
 	
 	// 敌方图片资源
 	public final static Image IMAGE_Enemy01=ResourceUtil.loadImage(IMAGE_PATH+"Enemy01.png");
@@ -64,7 +83,8 @@ public class Resource {
 	public final static Image IMAGE_Enemy06=ResourceUtil.loadImage(IMAGE_PATH+"Enemy06.png");
 	public final static Image IMAGE_Enemy07=ResourceUtil.loadImage(IMAGE_PATH+"Enemy07.png");
 	public final static Image IMAGE_Enemy08=ResourceUtil.loadImage(IMAGE_PATH+"Enemy08.png");
-	public final static Image [] IMAGE_Enemy={IMAGE_Enemy01, IMAGE_Enemy02, IMAGE_Enemy03, IMAGE_Enemy04, IMAGE_Enemy05, IMAGE_Enemy06, IMAGE_Enemy07, IMAGE_Enemy08};
+	public final static Image IMAGE_Enemy09=ResourceUtil.loadImage(IMAGE_PATH+"Enemy09.png");
+	public final static Image [] IMAGE_Enemy={IMAGE_Enemy01, IMAGE_Enemy02, IMAGE_Enemy03, IMAGE_Enemy04, IMAGE_Enemy05, IMAGE_Enemy06, IMAGE_Enemy07, IMAGE_Enemy08, IMAGE_Enemy09};
 	// 敌方子弹
 	public final static Image IMAGE_EnemyBullet01=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/EnemyBullet01.png");
 	public final static Image IMAGE_EnemyBullet02=ResourceUtil.loadImage(IMAGE_PATH+"Bullet/EnemyBullet02.png");
@@ -99,7 +119,9 @@ public class Resource {
 	public final static Image [] IMAGE_Explosion={IMAGE_Explosion01, IMAGE_Explosion02, IMAGE_Explosion03, IMAGE_Explosion04, IMAGE_Explosion05, IMAGE_Explosion06, IMAGE_Explosion07};
 	
 	// 音乐
-	public final static String MUSIC_bgsound=MUSIC_PATH+"bgsound.mp3";
+	public final static String MUSIC_bgsound01=MUSIC_PATH+"bgsound01.mp3";
+	public final static String MUSIC_bgsound02=MUSIC_PATH+"bgsound02.wav";
+	public final static String [] MUSIC_bgsounds=new String[]{MUSIC_bgsound01, MUSIC_bgsound02};
 	public final static String MUSIC_Boss_Comming=MUSIC_PATH+"Boss_Comming.mp3";
 	public final static String MUSIC_Bullet01=MUSIC_PATH+"Bullet01.mp3";
 	public final static String MUSIC_Bullet02=MUSIC_PATH+"Bullet02.mp3";
