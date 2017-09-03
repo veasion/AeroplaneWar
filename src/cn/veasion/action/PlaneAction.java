@@ -56,6 +56,8 @@ public class PlaneAction extends JPanel{
 					}
 				}else if(key==KeyEvent.VK_ESCAPE && p.getStatus()==GameBean.STATUS_OVER){
 					p.setStatus(GameBean.STATUS_HOME);
+				}else if(key==KeyEvent.VK_0 || key==KeyEvent.VK_NUMPAD0){
+					p.battleground.changeBackground(null);
 				}
 				p.myPlane.keyReleased(e);
 			}

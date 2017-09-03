@@ -1,6 +1,5 @@
 package cn.veasion.bean;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
@@ -57,20 +56,31 @@ public class Battleground implements Serializable{
 	private int y=0;
 	
 	public Battleground(GameBean p, Integer type){
+		this.init();
 		this.changeBackground(type);
 		this.p=p;
 	}
 	
 	public Battleground(GameBean p, boolean isUp, Image bgImage){
+		this.init();
 		this.p=p;
 		this.bgImage=bgImage;
 		this.isUp=isUp;
 	}
 	
 	public Battleground(GameBean p, boolean isUp, Image [] bgImages){
+		this.init();
 		this.p=p;
 		this.bgImages=bgImages;
 		this.isUp=isUp;
+	}
+	
+	private void init(){
+		this.y=0;
+		this.index=0;
+		this.bgImage=null;
+		this.bgImages=null;
+		this.isUp=false;
 	}
 	
 	public void draw(Graphics g){
@@ -122,6 +132,7 @@ public class Battleground implements Serializable{
 	 * 改变背景战场 
 	 */
 	public void changeBackground(Integer type){
+		this.init();
 		if(type==null){
 			type=VeaUtil.random(TYPES);
 		}
