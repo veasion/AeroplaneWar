@@ -1,5 +1,7 @@
 package cn.veasion.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -45,7 +47,7 @@ public class VeaUtil {
 	public static Integer readHistoryRecord() throws Exception{
 		ObjectInputStream input=null;
 		try{
-			input = new ObjectInputStream(new FileInputStream(objFilePath));
+			input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(objFilePath)));
 			return (Integer) input.readObject();
 		}catch(Exception e){
 			throw e;
@@ -60,9 +62,10 @@ public class VeaUtil {
 	 * 保存当前纪录为最高纪录 
 	 */
 	public static void saveCurrentRecord(Integer score) throws Exception{
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(objFilePath));
+		ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(objFilePath)));
 		out.writeObject(score);
 		out.flush();
 		out.close();
 	}
+	
 }
