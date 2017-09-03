@@ -119,18 +119,18 @@ public class Resource {
 	public final static Image [] IMAGE_Explosion={IMAGE_Explosion01, IMAGE_Explosion02, IMAGE_Explosion03, IMAGE_Explosion04, IMAGE_Explosion05, IMAGE_Explosion06, IMAGE_Explosion07};
 	
 	// 音乐
-	public final static String MUSIC_bgsound01=MUSIC_PATH+"bgsound01.mp3";
+	public final static String MUSIC_bgsound01=MUSIC_PATH+"bgsound01.wav";
 	public final static String MUSIC_bgsound02=MUSIC_PATH+"bgsound02.wav";
 	public final static String [] MUSIC_bgsounds=new String[]{MUSIC_bgsound01, MUSIC_bgsound02};
-	public final static String MUSIC_Boss_Comming=MUSIC_PATH+"Boss_Comming.mp3";
-	public final static String MUSIC_Bullet01=MUSIC_PATH+"Bullet01.mp3";
-	public final static String MUSIC_Bullet02=MUSIC_PATH+"Bullet02.mp3";
-	public final static String MUSIC_Bullet03=MUSIC_PATH+"Bullet03.mp3";
-	public final static String MUSIC_Bullet04=MUSIC_PATH+"Bullet04.mp3";
-	public final static String MUSIC_Bullet06=MUSIC_PATH+"Bullet06.mp3";
-	public final static String MUSIC_gameover=MUSIC_PATH+"gameover.mp3";
-	public final static String MUSIC_Enemy_Boom=MUSIC_PATH+"Enemy_Boom.mp3";
-	public final static String MUSIC_GetItem=MUSIC_PATH+"GetItem.mp3";
-	public final static String MUSIC_Health_Low=MUSIC_PATH+"Health_Low.mp3";
+	public final static String MUSIC_Boss_Comming=MUSIC_PATH+"Boss_Comming.wav";
+	public final static String MUSIC_Bullet01=MUSIC_PATH+"Bullet01.wav";
+	public final static String MUSIC_Bullet02=MUSIC_PATH+"Bullet02.wav";
+	public final static String MUSIC_Bullet03=MUSIC_PATH+"Bullet03.wav";
+	public final static String MUSIC_Bullet04=MUSIC_PATH+"Bullet04.wav";
+	public final static String MUSIC_Bullet06=MUSIC_PATH+"Bullet06.wav";
+	public final static String MUSIC_gameover=MUSIC_PATH+"gameover.wav";
+	public final static String MUSIC_Enemy_Boom=MUSIC_PATH+"Enemy_Boom.wav";
+	public final static String MUSIC_GetItem=MUSIC_PATH+"GetItem.wav";
+	public final static String MUSIC_Health_Low=MUSIC_PATH+"Health_Low.wav";
 	
 }

@@ -2,8 +2,6 @@ package cn.veasion.action;
 
 import java.awt.Rectangle;
 
-import javax.rmi.CORBA.Util;
-
 import cn.veasion.bean.BloodSupply;
 import cn.veasion.bean.EnemyBoos;
 import cn.veasion.bean.EnemyPlane;

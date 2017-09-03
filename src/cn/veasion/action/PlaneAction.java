@@ -3,7 +3,6 @@ package cn.veasion.action;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -58,6 +57,19 @@ public class PlaneAction extends JPanel{
 					p.setStatus(GameBean.STATUS_HOME);
 				}else if(key==KeyEvent.VK_0 || key==KeyEvent.VK_NUMPAD0){
 					p.battleground.changeBackground(null);
+				}else if(key==KeyEvent.VK_ADD){
+					p.myPlane.addBlood(10);
+				}else if(key==KeyEvent.VK_SUBTRACT){
+					int s=VeaUtil.random(2, 5);
+					if(s==2){
+						p.createBulletSupply02Time-=Constants.CreateBulletSupply02Frequency;
+					}else if(s==3){
+						p.createBulletSupply03Time-=Constants.CreateBulletSupply03Frequency;
+					}else if(s==4){
+						p.createBulletSupply04Time-=Constants.CreateBulletSupply04Frequency;
+					}else if(s==5){
+						p.createBulletSupply05Time-=Constants.CreateBulletSupply05Frequency;
+					}
 				}
 				p.myPlane.keyReleased(e);
 			}

@@ -56,7 +56,6 @@ public class Battleground implements Serializable{
 	private int y=0;
 	
 	public Battleground(GameBean p, Integer type){
-		this.init();
 		this.changeBackground(type);
 		this.p=p;
 	}
@@ -81,6 +80,7 @@ public class Battleground implements Serializable{
 		this.bgImage=null;
 		this.bgImages=null;
 		this.isUp=false;
+		this.bgMusicPath=VeaUtil.random(Resource.MUSIC_bgsounds);
 	}
 	
 	public void draw(Graphics g){
@@ -196,6 +196,7 @@ public class Battleground implements Serializable{
 		new Thread(()->{
 			try {
 				ResourceUtil.playMusic(musicPath, p);
+				Thread.sleep(10);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -209,7 +210,6 @@ public class Battleground implements Serializable{
 					ResourceUtil.playMusic(bgMusicPath, p);
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.exit(0);
 				}
 			}
 		}

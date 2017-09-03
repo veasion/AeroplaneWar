@@ -3,13 +3,13 @@ package cn.veasion.action;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.JFrame;
-
 import cn.veasion.util.Resource;
 
 /**
  * 开始游戏.
  * 
  * @auto Veasion
+ * @since www.luozhuowei.cn
  */
 public class StartRun {
 	
@@ -17,9 +17,9 @@ public class StartRun {
 	 * 启动游戏
 	 */
 	public static void main(String[] args) {
-		try{
+		try {
 			start();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

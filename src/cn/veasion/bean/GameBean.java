@@ -232,9 +232,12 @@ public class GameBean implements Serializable{
 		if(status==STATUS_HOME){
 			// 初始化游戏
 			this.init();
+			this.pauseTime=System.currentTimeMillis();
 		}else if(status==STATUS_GAME){
 			if(this.status==STATUS_PAUSE){
 				// 继续游戏
+				this.recoverProducedTime();
+			}else if(this.status==STATUS_HOME){
 				this.recoverProducedTime();
 			}
 		}else if(status==STATUS_OVER){

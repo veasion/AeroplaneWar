@@ -1,14 +1,10 @@
 package cn.veasion.util;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
-
-import cn.veasion.bean.GameBean;
 
 /**
  * 帮助类.
@@ -18,7 +14,7 @@ import cn.veasion.bean.GameBean;
 public class VeaUtil {
 
 	private static Random random=new Random();
-	private static final String objFilePath=VeaUtil.class.getResource("/").getPath()+"history.obj";
+	private static final String objFilePath="C:\\AeroplaneWarHistory.obj";
 	
 	/**
 	 * 随机数字
@@ -47,13 +43,16 @@ public class VeaUtil {
 	 * 读取最高历史纪录 
 	 */
 	public static Integer readHistoryRecord() throws Exception{
-		File objFile=new File(objFilePath);
-		if(objFile.exists()){
-			@SuppressWarnings("resource")
-			ObjectInputStream input=new ObjectInputStream(new FileInputStream(objFile));
-			return (Integer)input.readObject();
-		}else{
-			return null;
+		ObjectInputStream input=null;
+		try{
+			input = new ObjectInputStream(new FileInputStream(objFilePath));
+			return (Integer) input.readObject();
+		}catch(Exception e){
+			throw e;
+		}finally{
+			if(input!=null){
+				input.close();
+			}
 		}
 	}
 	
@@ -61,12 +60,9 @@ public class VeaUtil {
 	 * 保存当前纪录为最高纪录 
 	 */
 	public static void saveCurrentRecord(Integer score) throws Exception{
-		BufferedOutputStream buff = new BufferedOutputStream(
-				new FileOutputStream(objFilePath));
-		ObjectOutputStream out = new ObjectOutputStream(buff);
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(objFilePath));
 		out.writeObject(score);
 		out.flush();
 		out.close();
 	}
-	
 }

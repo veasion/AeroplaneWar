@@ -3,10 +3,10 @@ package cn.veasion.util;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,7 +16,6 @@ import javax.sound.sampled.SourceDataLine;
 import javax.swing.filechooser.FileSystemView;
 
 import cn.veasion.bean.GameBean;
-import javazoom.jl.player.advanced.AdvancedPlayer;
 
 /**
  * 资源帮助类.
@@ -64,43 +63,25 @@ public class ResourceUtil {
 	}
 	
 	/**
-	 * 播放音乐
+	 * 播放wav格式音乐
 	 */
 	public static void playMusic(String path, GameBean p) throws Exception {
-		URL u=ResourceUtil.class.getResource(path);
-		File file=new File(u.getPath());
-		if(file.exists() && file.isFile()){
-			if(path.endsWith("wav")){
-				playWavMusic(file, p);
-			}else{
-				new AdvancedPlayer(u.openStream()).play();
-			}
-		}
+		playWavMusic(ResourceUtil.class.getResourceAsStream(path), p);
 	}
 	
-	/**
-	 * wav格式音乐 
-	 */
-	private static void playWavMusic(File file, GameBean p){
+	private static void playWavMusic(InputStream in, GameBean p) throws Exception{
 		byte[] audioData = new byte[1024];
 		// 音源:即需要把本地或网络上的音频读进此处，
 		// 注意:声音的播方是在将声加入到此处之后，然后再写向声卡
 		AudioInputStream ais = null;
 		SourceDataLine line = null;
-		try {
-			ais = AudioSystem.getAudioInputStream(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// 注意：用BufferedInputStream 它重写了父类mark和resetf方法
+		ais = AudioSystem.getAudioInputStream(new BufferedInputStream(in));
 		if (ais != null) {
 			AudioFormat baseFormat = ais.getFormat();
 			DataLine.Info info = new DataLine.Info(SourceDataLine.class, baseFormat);
-			try {
-				line = (SourceDataLine) AudioSystem.getLine(info);
-				line.open(baseFormat);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			line = (SourceDataLine) AudioSystem.getLine(info);
+			line.open(baseFormat);
 		}
 		if (line == null) {
 			return;
@@ -112,19 +93,11 @@ public class ResourceUtil {
 		while (inByte != -1) {
 			// 判断游戏是否暂停
 			if (GameBean.STATUS_PAUSE != p.getStatus()) {
-				try {
-					// 将音频流读入到缓冲区中
-					inByte = ais.read(audioData, 0, 1024);
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-				try {
-					if (inByte > 0) {
-						// 将缓冲区中的内容写出到音频器中，暂解。
-						line.write(audioData, 0, inByte);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				// 将音频流读入到缓冲区中
+				inByte = ais.read(audioData, 0, 1024);
+				if (inByte > 0) {
+					// 将缓冲区中的内容写出到音频器中，暂解。
+					line.write(audioData, 0, inByte);
 				}
 			}
 		}
@@ -135,5 +108,4 @@ public class ResourceUtil {
 		// 关闭
 		line.close();
 	}
-	
 }
