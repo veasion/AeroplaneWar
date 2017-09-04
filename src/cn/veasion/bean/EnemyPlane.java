@@ -41,7 +41,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 			this.image=image;
 		}else{
 			this.image=VeaUtil.random(Resource.IMAGE_Enemy);
-			// 特殊战机
+			// 随机特殊战机
 			if(p.enemyEspecialCount()<3 && VeaUtil.random(1, 5)==3){
 				blood+=20;
 				this.especial=true;
@@ -51,6 +51,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 		this.blood=blood;
 		this.power=Constants.EnemyPower;
 		this.isLive=true;
+		// 随机向左向右移动方向
 		this.toLeft=VeaUtil.random(1, 2)==2;
 		sendBulletTime=System.currentTimeMillis();
 	}
@@ -70,6 +71,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 
 	@Override
 	public void sendBullet() {
+		// 发射子弹
 		if(System.currentTimeMillis()-sendBulletTime >= VeaUtil.random(Constants.EnemyBulletFrequency, Constants.EnemyBulletFrequency+360)){
 			EnemyBullet eb=new EnemyBullet(p);
 			eb.create(VeaUtil.random(Resource.IMAGE_EnemyBullets), Constants.EnemyPower, new Rectangle(r.x+30, r.y+60, 15, 15));
@@ -97,6 +99,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	private void commonMove(){
 		for (int i = 0, len=p.enemyPlanes.size(); i < len; i++) {
 			EnemyPlane ep=p.enemyPlanes.get(i);
+			// 普通战机与其他战机碰撞则向左或向右移动
 			if(ep!=null && ep!=this && this.area().intersects(ep.area())){
 				if(toLeft){
 					r.x-=Constants.EnemyPlaneVelocity;
@@ -113,6 +116,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 				}
 			}
 		}
+		// 向下移动
 		r.y+=Constants.EnemyPlaneVelocity;
 		if(r.y>=p.containerHeight-r.width/2){
 			this.isLive=false;
@@ -126,6 +130,7 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	 * 特殊敌方飞机移动 
 	 */
 	private void especialMove(){
+		// 特殊战机向下移动到120时后向左和向右来回移动
 		if(r.y>=120){
 			if(toLeft){
 				r.x-=Constants.EnemyPlaneVelocity;

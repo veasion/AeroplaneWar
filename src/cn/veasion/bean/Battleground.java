@@ -46,7 +46,6 @@ public class Battleground implements Serializable{
 			TYPE_SKY_PILLAR, TYPE_ABYSS_BRIDGE,
 			TYPE_CLOUD_LAYER, TYPE_STAR_SKY, TYPE_ROAD_VILLAGE};
 	
-	private BgMusicThread thread;
 	private GameBean p;
 	private Image bgImage;
 	private Image [] bgImages;
@@ -80,17 +79,18 @@ public class Battleground implements Serializable{
 		this.bgImage=null;
 		this.bgImages=null;
 		this.isUp=false;
+		// 随机背景音乐
 		this.bgMusicPath=VeaUtil.random(Resource.MUSIC_bgsounds);
 	}
 	
 	public void draw(Graphics g){
 		
 		if(this.bgImages==null){
-			// 单背景双循环
+			// 单背景双循环算法
 			g.drawImage(bgImage, 0, y, p.containerWidth, p.containerHeight, null);
 			g.drawImage(bgImage, 0, y>=0 ? y-p.containerHeight : p.containerHeight-Math.abs(y), p.containerWidth, p.containerHeight, null);
 		}else{
-			// 背景数组循环
+			// 背景数组循环算法
 			g.drawImage(bgImages[index], 0, y, p.containerWidth, p.containerHeight, null);
 			g.drawImage(bgImages[index < bgImages.length-1 ? index+1 : 0], 0, isUp ? p.containerHeight-Math.abs(y) : y-p.containerHeight, p.containerWidth, p.containerHeight, null);
 		}
@@ -134,6 +134,7 @@ public class Battleground implements Serializable{
 	public void changeBackground(Integer type){
 		this.init();
 		if(type==null){
+			// 随机战场
 			type=VeaUtil.random(TYPES);
 		}
 		switch (type) {
@@ -188,11 +189,13 @@ public class Battleground implements Serializable{
 	
 	public void playBackgroundMusic(String bgMusicPath){
 		this.bgMusicPath=bgMusicPath;
-		thread=new BgMusicThread();
+		// 开启线程循环播放背景音乐
+		BgMusicThread thread=new BgMusicThread();
 		thread.start();
 	}
 	
 	public void playMusic(final String musicPath){
+		// 开启线程播放音乐
 		new Thread(()->{
 			try {
 				ResourceUtil.playMusic(musicPath, p);
@@ -205,6 +208,7 @@ public class Battleground implements Serializable{
 	
 	class BgMusicThread extends Thread{
 		public void run() {
+			// 判断是否为暂停
 			while(p.getStatus() != GameBean.STATUS_PAUSE){
 				try {
 					ResourceUtil.playMusic(bgMusicPath, p);

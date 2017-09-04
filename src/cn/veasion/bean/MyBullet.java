@@ -56,11 +56,13 @@ public class MyBullet implements Bullet, Serializable{
 	@Override
 	public void draw(Graphics g) {
 		if(images !=null){
+			// 图组超炫子弹
 			g.drawImage(images[index++], r.x, r.y, r.width, r.height, null);
 			if(index>=images.length){
 				index=0;
 			}
 		}else{
+			// 普通子弹
 			g.drawImage(image, r.x, r.y, r.width, r.height, null);
 		}
 		this.move();
@@ -73,6 +75,7 @@ public class MyBullet implements Bullet, Serializable{
 
 	@Override
 	public void move() {
+		// 移动
 		if(isLive && p.allowMove()){
 			r.y-=Constants.MyBulletVelocity;
 			if(r.y<0){

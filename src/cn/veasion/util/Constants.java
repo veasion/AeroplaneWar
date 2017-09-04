@@ -131,7 +131,12 @@ public class Constants {
 	public static int CreateBulletSupply05Frequency=59000;
 	
 	
-	//=============== 其它默认变量  ===============\\
+	//=============== 其它默认变量和方法  ===============\\
+	
+	/**
+	 * 游戏标题 
+	 */
+	public static String title="飞机大战 --Veasion";
 	
 	/**
 	 * 绘画阴影默认颜色 
@@ -143,5 +148,46 @@ public class Constants {
 	 */
 	public static Color itselfDefaultColor=Color.white;
 	
+	/**
+	 * 作弊代码 
+	 */
+	public static String cheatsCode="Veasion";
+	
+	// 作弊是否开启 
+	private static boolean isCheats=false;
+	// 作弊记录 
+	private static int cheatsCount;
+	
+	/**
+	 * 获取作弊是否开启 
+	 */
+	public static boolean isCheats() {
+		return isCheats;
+	}
+	
+	/**
+	 * 作弊是否开启 
+	 */
+	public static void setCheats(boolean isCheats) {
+		Constants.isCheats = isCheats;
+		if(isCheats){
+			cheatsCount++;
+		}
+	}
+	
+	/**
+	 * 获取作弊次数 
+	 */
+	public static int getCheatsCount() {
+		return cheatsCount;
+	}
+	
+	/**
+	 * 清空作弊次数
+	 */
+	public static void cheatsCountClear() {
+		setCheats(false);
+		Constants.cheatsCount = 0;
+	}
 	
 }

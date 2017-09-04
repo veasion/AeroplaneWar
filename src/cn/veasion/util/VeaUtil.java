@@ -2,6 +2,7 @@ package cn.veasion.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -46,9 +47,18 @@ public class VeaUtil {
 	 */
 	public static Integer readHistoryRecord() throws Exception{
 		ObjectInputStream input=null;
+		if(!new File(objFilePath).exists()) return null;
 		try{
 			input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(objFilePath)));
-			return (Integer) input.readObject();
+			Object obj=input.readObject();
+			if(obj==null) return null;
+			String content=String.valueOf(obj);
+			int index=-1;
+			if((index=content.indexOf("|"))==-1){
+				return Integer.valueOf(content);
+			}else{
+				return Integer.valueOf(content.substring(0, index));
+			}
 		}catch(Exception e){
 			throw e;
 		}finally{
@@ -62,8 +72,11 @@ public class VeaUtil {
 	 * 保存当前纪录为最高纪录 
 	 */
 	public static void saveCurrentRecord(Integer score) throws Exception{
+		if(score==null) return;
+		int cheatsCount=Constants.getCheatsCount();
+		String content=score + (cheatsCount > 0 ? "|"+cheatsCount : "");
 		ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(objFilePath)));
-		out.writeObject(score);
+		out.writeObject(content);
 		out.flush();
 		out.close();
 	}

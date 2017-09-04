@@ -161,6 +161,7 @@ public class GameBean implements Serializable{
 		this.score=0;
 		this.myPlane=new MyPlane(this);
 		this.firstReadObjFile=true;
+		Constants.cheatsCountClear();
 		this.myPlane.create(null, Constants.MyPlaneBlood, 
 				new Rectangle((containerWidth-80)/2, containerHeight-70-30, 80, 70));
 	}

@@ -65,9 +65,11 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 	@Override
 	public void draw(Graphics g) {
 		if(images !=null && changeImage && images.length>1){
+			// 被子弹击中时状态
 			image=images[1];
 			changeImage=false;
 		}else if(images !=null){
+			// 正常状态
 			image=images[0];
 		}
 		g.drawImage(image, r.x, r.y, r.width, r.height, null);
@@ -75,6 +77,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 		this.sendBullet();
 		this.move();
 		if(first){
+			// 第一次出现播放音乐
 			p.battleground.playMusic(Resource.MUSIC_Boss_Comming);
 			first=false;
 		}
@@ -87,6 +90,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 
 	@Override
 	public void sendBullet() {
+		// 发射子弹
 		if(System.currentTimeMillis()-sendBulletTime >= Constants.EnemyBossBulletFrequency){
 			EnemyBullet eb=new EnemyBullet(p);
 			int w=30,h=40;
@@ -102,6 +106,7 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 
 	@Override
 	public void move() {
+		// 大Boss移动算法
 		if(isLive && p.allowMove()){
 			if(r.y>=120){
 				if(flag){

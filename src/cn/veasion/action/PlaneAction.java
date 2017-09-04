@@ -30,7 +30,12 @@ public class PlaneAction extends JPanel{
 	
 	private static final long serialVersionUID = 143160032243117246L;
 
+	/**
+	 * 游戏参数
+	 */
 	private GameBean p=new GameBean();
+	private Integer historyScore;
+	private static StringBuffer keys;
 	
 	public PlaneAction() throws Exception{
 		this.init();
@@ -45,36 +50,12 @@ public class PlaneAction extends JPanel{
 			public void keyTyped(KeyEvent e) { }
 			public void keyReleased(KeyEvent e) {
 				int key=e.getKeyCode();
-				if(key==KeyEvent.VK_ENTER){
-					if(p.getStatus()==GameBean.STATUS_HOME){
-						p.setStatus(GameBean.STATUS_GAME);
-					}else if(p.getStatus()==GameBean.STATUS_GAME){
-						p.setStatus(GameBean.STATUS_PAUSE);
-					}else if(p.getStatus()==GameBean.STATUS_PAUSE){
-						p.setStatus(GameBean.STATUS_GAME);
-					}
-				}else if(key==KeyEvent.VK_ESCAPE && p.getStatus()==GameBean.STATUS_OVER){
-					p.setStatus(GameBean.STATUS_HOME);
-				}else if(key==KeyEvent.VK_0 || key==KeyEvent.VK_NUMPAD0){
-					p.battleground.changeBackground(null);
-				}else if(key==KeyEvent.VK_ADD){
-					p.myPlane.addBlood(10);
-				}else if(key==KeyEvent.VK_SUBTRACT){
-					int s=VeaUtil.random(2, 5);
-					if(s==2){
-						p.createBulletSupply02Time-=Constants.CreateBulletSupply02Frequency;
-					}else if(s==3){
-						p.createBulletSupply03Time-=Constants.CreateBulletSupply03Frequency;
-					}else if(s==4){
-						p.createBulletSupply04Time-=Constants.CreateBulletSupply04Frequency;
-					}else if(s==5){
-						p.createBulletSupply05Time-=Constants.CreateBulletSupply05Frequency;
-					}
-				}
-				p.myPlane.keyReleased(e);
+				// 按键监听
+				PlaneAction.keyReleased(p, key, e.getKeyChar());
+				p.myPlane.keyReleased(key);
 			}
 			public void keyPressed(KeyEvent e) {
-				p.myPlane.keyPressed(e);
+				p.myPlane.keyPressed(e.getKeyCode());
 			}
 		});
 		// 窗体大小监听
@@ -90,6 +71,7 @@ public class PlaneAction extends JPanel{
 				}
 			}
 		});
+		PlaneAction.keys=new StringBuffer();
 		// 初始化游戏参数
 		p.setStatus(GameBean.STATUS_HOME);
 		// 启动制造线程
@@ -100,28 +82,23 @@ public class PlaneAction extends JPanel{
 	@Override
 	public void paint(Graphics g) {
 		if(p.getStatus() == GameBean.STATUS_HOME){
-			// 清除上一帧
-			super.paint(g);
-			// 背景
-			p.battleground.draw(g);
-			this.paintHome(g);
+			super.paint(g);// 清除上一帧
+			p.battleground.draw(g);// 背景
+			this.paintHome(g);// 绘画首页
 		}else if(p.getStatus() == GameBean.STATUS_GAME){
-			// 清除上一帧
 			super.paint(g);
-			// 背景
 			p.battleground.draw(g);
-			this.paintGame(g);
-		}else if(p.getStatus() == GameBean.STATUS_OVER){
-			// 清除上一帧
-			super.paint(g);
-			// 背景
-			p.battleground.draw(g);
-			this.paintGameOver(g);
+			this.paintGame(g);// 绘画游戏界面
 		}else if(p.getStatus() == GameBean.STATUS_PAUSE){
-			this.paintGamePause(g);
+			this.paintGamePause(g);// 绘画暂停，不清除上一帧
+		}else if(p.getStatus() == GameBean.STATUS_OVER){
+			super.paint(g);
+			p.battleground.draw(g);
+			this.paintGameOver(g);// 绘画结束界面
 		}
 		
 		try {
+			// 延迟10
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -281,11 +258,12 @@ public class PlaneAction extends JPanel{
 		g.drawString("请按Enter继续游戏", (p.containerWidth-40*9)/2, p.containerHeight/2-20);
 	}
 	
+	
 	/**
 	 * 绘制游戏结束界面 
 	 */
-	private Integer historyScore;
 	private void paintGameOver(Graphics g){
+		// 判断本句是否为第一次读取历史记录
 		if(p.firstReadObjFile){
 			try {
 				// 读取历史最高纪录
@@ -332,7 +310,7 @@ public class PlaneAction extends JPanel{
 		
 		// 计算评价
 		String appraise="";
-		int [] scores={ 500, 1200, 3000, 4200, 5500, 6800, 8000, 9500, 16000};
+		int [] scores={ 800, 1500, 3200, 4400, 5700, 7000, 8200, 9700, 16200};
 		String [] appraises={ "F", "E", "D", "C", "B", "A", "S", "SS", "SSS"};
 		for (int i = 0; i < scores.length; i++) {
 			if(p.score<scores[i]){
@@ -358,4 +336,55 @@ public class PlaneAction extends JPanel{
 		g.drawImage(Resource.IMAGE_GameOver_Tips, (p.containerWidth-340)/2, p.containerHeight-100, 340, 80, null);
 	}
 	
+	/**
+	 * 键盘按键监听 
+	 */
+	private static void keyReleased(GameBean p, int key, char c){
+		// 监听Enter
+		if(key==KeyEvent.VK_ENTER){
+			if(p.getStatus()==GameBean.STATUS_HOME){
+				// 在首页按Enter，改变游戏状态开始游戏
+				p.setStatus(GameBean.STATUS_GAME);
+			}else if(p.getStatus()==GameBean.STATUS_GAME){
+				// 在游戏中按Enter为暂停
+				p.setStatus(GameBean.STATUS_PAUSE);
+			}else if(p.getStatus()==GameBean.STATUS_PAUSE){
+				// 在游戏暂停中按Enter为继续游戏
+				p.setStatus(GameBean.STATUS_GAME);
+			}
+		}else if(key==KeyEvent.VK_ESCAPE && p.getStatus()==GameBean.STATUS_OVER){
+			// 游戏结束按Esc为返回首页
+			p.setStatus(GameBean.STATUS_HOME);
+		}else if(key==KeyEvent.VK_0 || key==KeyEvent.VK_NUMPAD0){
+			// 按0随机改变背景
+			p.battleground.changeBackground(null);
+		}else if(key==KeyEvent.VK_ADD && Constants.isCheats()){
+			// 游戏作弊：按+加血
+			p.myPlane.addBlood(10);
+		}else if(key==KeyEvent.VK_SUBTRACT && Constants.isCheats()){
+			// 游戏作弊：按-随机出现2到5的武器补给箱
+			int s=VeaUtil.random(2, 5);
+			if(s==2){
+				p.createBulletSupply02Time-=Constants.CreateBulletSupply02Frequency;
+			}else if(s==3){
+				p.createBulletSupply03Time-=Constants.CreateBulletSupply03Frequency;
+			}else if(s==4){
+				p.createBulletSupply04Time-=Constants.CreateBulletSupply04Frequency;
+			}else if(s==5){
+				p.createBulletSupply05Time-=Constants.CreateBulletSupply05Frequency;
+			}
+		}
+		
+		// 开启和关闭作弊
+		if(key>=65 && key<=90){
+			keys.append(c);
+			if (keys.length() >= Constants.cheatsCode.length() && keys.indexOf(Constants.cheatsCode) != -1) {
+				Constants.setCheats(!Constants.isCheats());
+				keys.setLength(0);
+			}
+			if(keys.length()>20){
+				keys.setLength(0);
+			}
+		}
+	}
 }

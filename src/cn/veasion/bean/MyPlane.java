@@ -34,6 +34,7 @@ public class MyPlane implements Plane, Serializable{
 	private boolean isRight;
 	
 	private long sendBulletTime;
+	// 各武器的子弹可用数量
 	public int useBullet02;
 	public int useBullet03;
 	public int useBullet04;
@@ -62,6 +63,7 @@ public class MyPlane implements Plane, Serializable{
 
 	@Override
 	public void draw(Graphics g) {
+		// 绘画飞机
 		g.drawImage(image, r.x, r.y, r.width, r.height, null);
 		g.setColor(Color.red);
 		g.setFont(new Font("楷体", Font.BOLD, 16));
@@ -70,6 +72,7 @@ public class MyPlane implements Plane, Serializable{
 		int bx=2;
 		int size=25;
 		int by=p.containerHeight-size-2;
+		// 绘画各类武器子弹可用数量
 		if(useBullet02>0){
 			g.drawImage(Resource.IMAGE_BulletSupply02, bx, by, size, size, null);
 			g.setColor(Constants.itselfDefaultColor);
@@ -98,6 +101,7 @@ public class MyPlane implements Plane, Serializable{
 			g.drawString(String.valueOf(useBullet05), bx+size+10, by+size/2+5);
 			by-=size+5;
 		}
+		// 低血量绘画
 		if(this.blood<=28){
 			g.setColor(Color.red);
 			g.setFont(new Font("黑体", 0, 18));
@@ -113,8 +117,10 @@ public class MyPlane implements Plane, Serializable{
 
 	@Override
 	public void sendBullet() {
+		// 发射子弹
 		if(isLive && System.currentTimeMillis()-sendBulletTime > Constants.MyBulletFrequency){
 			int power=Constants.MyBulletPower;
+			// 依次发射各类武器子弹
 			if(useBullet05 > 0){
 				MyBullet myBullet1=new MyBullet(p, true);
 				MyBullet myBullet2=new MyBullet(p, true);
@@ -169,6 +175,7 @@ public class MyPlane implements Plane, Serializable{
 	public void move() {
 		int distance=Constants.MyPlaneVelocity;
 		if(isLive && p.allowMove()){
+			// 飞机移动方向
 			if(isUp){
 				r.y-=distance;
 				if(isLeft){
@@ -199,7 +206,7 @@ public class MyPlane implements Plane, Serializable{
 			}else{
 				image=Resource.IMAGE_Plane;
 			}
-			
+			// 防止出界
 			if(r.x > p.containerWidth-r.width/2){
 				r.x=p.containerWidth-r.width/2;
 			}else if(r.x < -r.width/2){
@@ -213,16 +220,17 @@ public class MyPlane implements Plane, Serializable{
 		}
 	}
 	
-	public void keyPressed(KeyEvent e){
-		updateDirection(e, true);
+	public void keyPressed(int key){
+		updateDirection(key, true);
 	}
 	
-	public void keyReleased(KeyEvent e){
-		updateDirection(e, false);
+	public void keyReleased(int key){
+		updateDirection(key, false);
 	}
 	
-	private int updateDirection(KeyEvent e, boolean flag){
-		switch (e.getKeyCode()) {
+	private void updateDirection(int key, boolean flag){
+		// 改变方向
+		switch (key) {
 			case KeyEvent.VK_W:
 			case KeyEvent.VK_UP:
 				this.isUp=flag;
@@ -240,7 +248,6 @@ public class MyPlane implements Plane, Serializable{
 				this.isRight=flag;
 				break;
 		}
-		return e.getKeyCode();
 	}
 	
 	@Override
@@ -250,6 +257,7 @@ public class MyPlane implements Plane, Serializable{
 	
 	@Override
 	public void addBlood(int addBlood){
+		// 加血
 		this.blood=this.blood+addBlood;
 		if(Constants.isUndead){
 			// 不死之身

@@ -29,6 +29,7 @@ public class Explosion implements Serializable{
 	}
 	
 	public void draw(Graphics g) {
+		// 爆炸效果
 		this.image=Resource.IMAGE_Explosion[index];
 		g.drawImage(image, r.x, r.y, r.width, r.height, null);
 		if(++index >= Resource.IMAGE_Explosion.length){

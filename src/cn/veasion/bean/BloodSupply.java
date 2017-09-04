@@ -63,6 +63,7 @@ public class BloodSupply implements Supply, Serializable{
 	public void supply() {
 		Rectangle r=this.area();
 		if(p.myPlane.isLive() && r.intersects(p.myPlane.area())){
+			// 加血
 			p.myPlane.addBlood(value);
 			this.isLive=false;
 			p.battleground.playMusic(Resource.MUSIC_GetItem);

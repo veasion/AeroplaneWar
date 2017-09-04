@@ -16,6 +16,7 @@ import cn.veasion.util.Resource;
 public class WeaponsSupply implements Supply, Serializable{
 
 	private static final long serialVersionUID = 2861714120545845974L;
+	// 武器类型
 	public final static int TYPE_BulletSupply02=2;
 	public final static int TYPE_BulletSupply03=3;
 	public final static int TYPE_BulletSupply04=4;
