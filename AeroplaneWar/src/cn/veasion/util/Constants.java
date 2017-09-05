@@ -26,7 +26,7 @@ public class Constants {
 	/**
 	 * 我方子飞机默认血量 
 	 */
-	public static int MyPlaneBlood=100;
+	public final static int MyPlaneBlood=100;
 	
 	/**
 	 * 我方飞机默认移动速度 
