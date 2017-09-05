@@ -223,7 +223,7 @@ public class PlaneAction extends JPanel{
 		g.drawString("生命值：", p.containerWidth-204, 48);
 		
 		//绘制空心血条方框
-		g.setColor(new Color(190,195,199));
+		g.setColor(new Color(190, 195, 199));
 		g.drawRect(p.containerWidth-109, 30, 101, 18);
 		
 		//绘制实心血条方框
@@ -310,29 +310,32 @@ public class PlaneAction extends JPanel{
 		
 		// 计算评价
 		String appraise="";
-		int [] scores={ 800, 1500, 3200, 4400, 5700, 7000, 8200, 9700, 16200};
-		String [] appraises={ "F", "E", "D", "C", "B", "A", "S", "SS", "SSS"};
+		int [] scores={1500, 2700, 4100, 5700, 6500, 8500, 10700, 13000, 16000, 20000};
+		String [] appraises={"F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "666"};
+		int len=0;
 		for (int i = 0; i < scores.length; i++) {
-			if(p.score<scores[i]){
+			if(p.score <= scores[i]){
 				appraise=appraises[i];
+				len=appraise.length();
 				break;
 			}
 			if(i>=scores.length-1){
-				appraise="666";
+				len=4;
+				appraise="大神";
 			}
 		}
 		//绘制结束时评价显示阴影
 		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.BOLD, 40));
-		g.drawString("评价：", p.containerWidth/2-40*3-appraise.length()*10+20, 387);
+		g.drawString("评价：", p.containerWidth/2-40*3-len*10+20, 387);
 		//绘制结束时评价显示
 		g.setColor(Constants.itselfDefaultColor);
-		g.drawString("评价：", p.containerWidth/2-40*3-appraise.length()*10+18, 385);
+		g.drawString("评价：", p.containerWidth/2-40*3-len*10+18, 385);
 		g.setColor(Constants.shadeDefaultColor);
 		g.setFont(new Font("黑体", Font.BOLD, 80));
-		g.drawString(appraise, (p.containerWidth-appraise.length()*40)/2+60+2, 397);
+		g.drawString(appraise, (p.containerWidth-len*40)/2+60+2, 397);
 		g.setColor(Constants.itselfDefaultColor);
-		g.drawString(appraise, (p.containerWidth-appraise.length()*40)/2+60, 395);
+		g.drawString(appraise, (p.containerWidth-len*40)/2+60, 395);
 		g.drawImage(Resource.IMAGE_GameOver_Tips, (p.containerWidth-340)/2, p.containerHeight-100, 340, 80, null);
 	}
 	

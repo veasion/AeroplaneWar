@@ -257,11 +257,11 @@ public class MyPlane implements Plane, Serializable{
 	
 	@Override
 	public void addBlood(int addBlood){
-		// 加血
-		this.blood=this.blood+addBlood;
-		if(Constants.isUndead){
-			// 不死之身
-		}else if(this.blood<=0){
+		if(!Constants.isUndead){
+			// 加减血
+			this.blood=this.blood+addBlood;
+		}
+		if(this.blood<=0){
 			this.blood=0;
 			this.isLive=false;
 			p.setStatus(GameBean.STATUS_OVER);

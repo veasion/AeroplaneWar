@@ -1,5 +1,7 @@
 package cn.veasion.bean;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -81,6 +83,20 @@ public class EnemyBoos implements Plane, Kill, Serializable{
 			p.battleground.playMusic(Resource.MUSIC_Boss_Comming);
 			first=false;
 		}
+		// 空心血框
+		g.setColor(new Color(190, 195, 199));
+		g.drawRect(30, 55, 101, 10);
+		// 实心血
+		g.setColor(new Color(234, 75, 53));
+		g.fillRect(31, 55, (int)(((double)this.blood/Constants.EnemyBossBlood)*100), 11);
+		// 血量阴影
+		g.setFont(new Font("黑体", 0, 10));
+		g.setColor(Constants.shadeDefaultColor);
+		g.drawString(String.valueOf(this.blood), 80-(String.valueOf(this.blood).length()*5)/2+2, 64);
+		// 血量
+		g.setFont(new Font("黑体", 0, 10));
+		g.setColor(Constants.itselfDefaultColor);
+		g.drawString(String.valueOf(this.blood), 80-(String.valueOf(this.blood).length()*5)/2, 64);
 	}
 
 	@Override

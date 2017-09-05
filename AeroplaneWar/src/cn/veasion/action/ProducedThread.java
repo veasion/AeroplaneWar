@@ -41,7 +41,7 @@ public class ProducedThread extends Thread {
 						.random(Constants.CreateEnemyBossFrequency - 200, Constants.CreateEnemyBossFrequency + 500)) {
 					EnemyBoos boos = new EnemyBoos(p);
 					int index=VeaUtil.random(0, Resource.IMAGE_EnemyBosss.length-1);
-					boos.create(Resource.IMAGE_EnemyBosss[index], Resource.IMAGE_BossBullets[index], Constants.EnemyBlood * 10, new Rectangle((p.containerWidth-80)/2, 0, 80, 80));
+					boos.create(Resource.IMAGE_EnemyBosss[index], Resource.IMAGE_BossBullets[index], Constants.EnemyBossBlood, new Rectangle((p.containerWidth-80)/2, 0, 80, 80));
 					p.enemyBoss = boos;
 					p.createBossTime = System.currentTimeMillis();
 				}

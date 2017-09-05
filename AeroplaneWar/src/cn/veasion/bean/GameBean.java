@@ -155,7 +155,11 @@ public class GameBean implements Serializable{
 		this.enemyBullets=new ArrayList<>();
 		this.bloodSupplys=new ArrayList<>();
 		this.weaponsSupplys=new ArrayList<>();
-		this.battleground=new Battleground(this, null);
+		if(Constants.gameCount==1 && this.status==GameBean.STATUS_HOME && this.score==0){
+			this.battleground=new Battleground(this, Constants.battlegroundType);
+		}else{
+			this.battleground=new Battleground(this, null);
+		}
 		this.battleground.playBackgroundMusic(VeaUtil.random(Resource.MUSIC_bgsounds));
 		this.initProducedTime();
 		this.score=0;
@@ -244,6 +248,7 @@ public class GameBean implements Serializable{
 		}else if(status==STATUS_OVER){
 			// 游戏结束
 			this.battleground.playMusic(Resource.MUSIC_gameover);
+			Constants.gameCount++;
 		}else if(status==STATUS_PAUSE){
 			// 暂停
 			this.pauseTime=System.currentTimeMillis();

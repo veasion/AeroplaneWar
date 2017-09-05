@@ -2,6 +2,8 @@ package cn.veasion.util;
 
 import java.awt.Color;
 
+import cn.veasion.bean.Battleground;
+
 /**
  * 常量.
  * 
@@ -88,6 +90,11 @@ public class Constants {
 	 */
 	public static int EnemyBossBulletFrequency=800;
 	
+	/**
+	 * 敌方Boss默认血量
+	 */
+	public static int EnemyBossBlood=350;
+	
 	//=============== 制造默认变量  ===============\\
 	
 	/**
@@ -137,6 +144,16 @@ public class Constants {
 	 * 游戏标题 
 	 */
 	public static String title="飞机大战 --Veasion";
+	
+	/**
+	 * 游戏默认场景 ，随机为 null
+	 */
+	public static Integer battlegroundType=Battleground.TYPE_FIRE_MOUNT;
+	
+	/**
+	 * 当前为第几局 
+	 */
+	public static int gameCount=1;
 	
 	/**
 	 * 绘画阴影默认颜色 
