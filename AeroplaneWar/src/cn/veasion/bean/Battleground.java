@@ -200,7 +200,6 @@ public class Battleground implements Serializable{
 			public void run() {
 				try {
 					ResourceUtil.playMusic(musicPath, p);
-					Thread.sleep(10);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -214,6 +213,7 @@ public class Battleground implements Serializable{
 			while(p.getStatus() != GameBean.STATUS_PAUSE){
 				try {
 					ResourceUtil.playMusic(bgMusicPath, p);
+					Thread.sleep(10);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
