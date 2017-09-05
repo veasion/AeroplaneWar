@@ -196,12 +196,14 @@ public class Battleground implements Serializable{
 	
 	public void playMusic(final String musicPath){
 		// 开启线程播放音乐
-		new Thread(()->{
-			try {
-				ResourceUtil.playMusic(musicPath, p);
-				Thread.sleep(10);
-			} catch (Exception e) {
-				e.printStackTrace();
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					ResourceUtil.playMusic(musicPath, p);
+					Thread.sleep(10);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
