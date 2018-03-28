@@ -10,35 +10,36 @@ import cn.veasion.util.Resource;
 /**
  * 爆炸效果.
  * 
- * @auto Veasion
+ * @author Veasion
  */
-public class Explosion implements Serializable{
+public class Explosion implements Serializable {
 
 	private static final long serialVersionUID = -1575270680852250940L;
-	
+
 	private boolean isLive;
 	private Image image;
 	private Rectangle r;
 	private int index;
-	
-	public Explosion() { }
-	
-	public void create(Rectangle r) {
-		this.r=r;
-		this.isLive=true;
+
+	public Explosion() {
 	}
-	
+
+	public void create(Rectangle r) {
+		this.r = r;
+		this.isLive = true;
+	}
+
 	public void draw(Graphics g) {
 		// 爆炸效果
-		this.image=Resource.IMAGE_Explosion[index];
+		this.image = Resource.IMAGE_Explosion[index];
 		g.drawImage(image, r.x, r.y, r.width, r.height, null);
-		if(++index >= Resource.IMAGE_Explosion.length){
-			this.isLive=false;
+		if (++index >= Resource.IMAGE_Explosion.length) {
+			this.isLive = false;
 		}
 	}
-	
+
 	public boolean isLive() {
 		return this.isLive;
 	}
-	
+
 }

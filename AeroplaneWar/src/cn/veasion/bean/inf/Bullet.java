@@ -7,18 +7,18 @@ import java.awt.Rectangle;
 /**
  * 子弹接口.
  * 
- * @auto Veasion
+ * @author Veasion
  */
-public interface Bullet extends Kill{
-	
+public interface Bullet extends Kill {
+
 	void create(Image image, int power, Rectangle r);
-	
+
 	void draw(Graphics g);
-	
+
 	Rectangle area();
-	
+
 	void move();
-	
+
 	boolean isLive();
-	
+
 }

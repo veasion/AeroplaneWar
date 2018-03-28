@@ -14,12 +14,12 @@ import cn.veasion.util.VeaUtil;
 /**
  * 敌方飞机.
  * 
- * @auto Veasion
+ * @author Veasion
  */
-public class EnemyPlane implements Plane, Kill, Serializable{
+public class EnemyPlane implements Plane, Kill, Serializable {
 
 	private static final long serialVersionUID = -470314945420725311L;
-	
+
 	private GameBean p;
 	private boolean isLive;
 	private Image image;
@@ -28,32 +28,32 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	private Rectangle r;
 	public boolean especial;
 	private boolean toLeft;
-	
+
 	private long sendBulletTime;
-	
+
 	public EnemyPlane(GameBean p) {
-		this.p=p;
+		this.p = p;
 	}
-	
+
 	@Override
 	public void create(Image image, int blood, Rectangle r) {
-		if(image!=null){
-			this.image=image;
-		}else{
-			this.image=VeaUtil.random(Resource.IMAGE_Enemy);
+		if (image != null) {
+			this.image = image;
+		} else {
+			this.image = VeaUtil.random(Resource.IMAGE_Enemy);
 			// 随机特殊战机
-			if(p.enemyEspecialCount()<3 && VeaUtil.random(1, 5)==3){
-				blood+=20;
-				this.especial=true;
+			if (p.enemyEspecialCount() < 3 && VeaUtil.random(1, 5) == 3) {
+				blood += 20;
+				this.especial = true;
 			}
 		}
-		this.r=r;
-		this.blood=blood;
-		this.power=Constants.EnemyPower;
-		this.isLive=true;
+		this.r = r;
+		this.blood = blood;
+		this.power = Constants.EnemyPower;
+		this.isLive = true;
 		// 随机向左向右移动方向
-		this.toLeft=VeaUtil.random(1, 2)==2;
-		sendBulletTime=System.currentTimeMillis();
+		this.toLeft = VeaUtil.random(1, 2) == 2;
+		sendBulletTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -72,102 +72,104 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	@Override
 	public void sendBullet() {
 		// 发射子弹
-		if(System.currentTimeMillis()-sendBulletTime >= VeaUtil.random(Constants.EnemyBulletFrequency, Constants.EnemyBulletFrequency+360)){
-			EnemyBullet eb=new EnemyBullet(p);
-			eb.create(VeaUtil.random(Resource.IMAGE_EnemyBullets), Constants.EnemyPower, new Rectangle(r.x+30, r.y+60, 15, 15));
+		if (System.currentTimeMillis() - sendBulletTime >= VeaUtil.random(Constants.EnemyBulletFrequency,
+				Constants.EnemyBulletFrequency + 360)) {
+			EnemyBullet eb = new EnemyBullet(p);
+			eb.create(VeaUtil.random(Resource.IMAGE_EnemyBullets), Constants.EnemyPower,
+					new Rectangle(r.x + 30, r.y + 60, 15, 15));
 			p.enemyBullets.add(eb);
-			sendBulletTime=System.currentTimeMillis();
+			sendBulletTime = System.currentTimeMillis();
 		}
 	}
 
 	@Override
 	public void move() {
-		if(isLive && p.allowMove()){
-			if(especial){
+		if (isLive && p.allowMove()) {
+			if (especial) {
 				// 特殊敌方飞机移动
 				this.especialMove();
-			}else{
+			} else {
 				// 普通敌方飞机移动
 				this.commonMove();
 			}
 		}
 	}
-	
+
 	/**
-	 * 普通敌方飞机移动 
+	 * 普通敌方飞机移动
 	 */
-	private void commonMove(){
-		for (int i = 0, len=p.enemyPlanes.size(); i < len; i++) {
-			EnemyPlane ep=p.enemyPlanes.get(i);
+	private void commonMove() {
+		for (int i = 0, len = p.enemyPlanes.size(); i < len; i++) {
+			EnemyPlane ep = p.enemyPlanes.get(i);
 			// 普通战机与其他战机碰撞则向左或向右移动
-			if(ep!=null && ep!=this && this.area().intersects(ep.area())){
-				if(toLeft){
-					r.x-=Constants.EnemyPlaneVelocity;
-					if(r.x<=0){
-						r.x=0;
-						toLeft=false;
+			if (ep != null && ep != this && this.area().intersects(ep.area())) {
+				if (toLeft) {
+					r.x -= Constants.EnemyPlaneVelocity;
+					if (r.x <= 0) {
+						r.x = 0;
+						toLeft = false;
 					}
-				}else{
-					r.x+=Constants.EnemyPlaneVelocity;
-					if(r.x>=p.containerWidth-r.width){
-						r.x=p.containerWidth-r.width;
-						toLeft=true;
+				} else {
+					r.x += Constants.EnemyPlaneVelocity;
+					if (r.x >= p.containerWidth - r.width) {
+						r.x = p.containerWidth - r.width;
+						toLeft = true;
 					}
 				}
 			}
 		}
 		// 向下移动
-		r.y+=Constants.EnemyPlaneVelocity;
-		if(r.y>=p.containerHeight-r.width/2){
-			this.isLive=false;
-			Explosion e=new Explosion();
+		r.y += Constants.EnemyPlaneVelocity;
+		if (r.y >= p.containerHeight - r.width / 2) {
+			this.isLive = false;
+			Explosion e = new Explosion();
 			e.create(this.area());
 			p.explosions.add(e);
 		}
 	}
-	
+
 	/**
-	 * 特殊敌方飞机移动 
+	 * 特殊敌方飞机移动
 	 */
-	private void especialMove(){
+	private void especialMove() {
 		// 特殊战机向下移动到120时后向左和向右来回移动
-		if(r.y>=120){
-			if(toLeft){
-				r.x-=Constants.EnemyPlaneVelocity;
-				if(r.x<=-r.width/2){
-					toLeft=false;
+		if (r.y >= 120) {
+			if (toLeft) {
+				r.x -= Constants.EnemyPlaneVelocity;
+				if (r.x <= -r.width / 2) {
+					toLeft = false;
 				}
-			}else{
-				r.x+=Constants.EnemyPlaneVelocity;
-				if(r.x>=p.containerWidth-10){
-					toLeft=true;
+			} else {
+				r.x += Constants.EnemyPlaneVelocity;
+				if (r.x >= p.containerWidth - 10) {
+					toLeft = true;
 				}
 			}
-		}else{
-			r.y+=Constants.EnemyPlaneVelocity;
+		} else {
+			r.y += Constants.EnemyPlaneVelocity;
 		}
 	}
-	
+
 	@Override
-	public void kill(){
-		Rectangle r=this.area();
+	public void kill() {
+		Rectangle r = this.area();
 		// 杀放我飞机
-		if(r.intersects(p.myPlane.area())){
+		if (r.intersects(p.myPlane.area())) {
 			p.myPlane.addBlood(-power);
-			Explosion e=new Explosion();
+			Explosion e = new Explosion();
 			e.create(this.area());
 			p.explosions.add(e);
-			this.isLive=false;
+			this.isLive = false;
 			p.battleground.playMusic(Resource.MUSIC_Enemy_Boom);
 		}
 	}
-	
+
 	@Override
 	public void addBlood(int addBlood) {
-		this.blood=this.blood+addBlood;
-		if(this.blood<=0){
-			this.blood=0;
-			this.isLive=false;
+		this.blood = this.blood + addBlood;
+		if (this.blood <= 0) {
+			this.blood = 0;
+			this.isLive = false;
 		}
 	}
 
@@ -175,11 +177,11 @@ public class EnemyPlane implements Plane, Kill, Serializable{
 	public boolean isLive() {
 		return this.isLive;
 	}
-	
+
 	public boolean isEspecial() {
 		return especial;
 	}
-	
+
 	public boolean isToLeft() {
 		return toLeft;
 	}

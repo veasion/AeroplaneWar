@@ -13,32 +13,32 @@ import cn.veasion.util.VeaUtil;
 /**
  * 敌方子弹.
  * 
- * @auto Veasion
+ * @author Veasion
  */
-public class EnemyBullet implements Bullet, Serializable{
-	
+public class EnemyBullet implements Bullet, Serializable {
+
 	private static final long serialVersionUID = -3765899649571787469L;
-	
+
 	private GameBean p;
 	private boolean isLive;
 	private Image image;
 	private int power;// 威力
 	private Rectangle r;
-	
+
 	public EnemyBullet(GameBean p) {
-		this.p=p;
+		this.p = p;
 	}
-	
+
 	@Override
 	public void create(Image image, int power, Rectangle r) {
-		if(image !=null){
-			this.image=image;
-		}else{
-			this.image=VeaUtil.random(Resource.IMAGE_EnemyBullets);
+		if (image != null) {
+			this.image = image;
+		} else {
+			this.image = VeaUtil.random(Resource.IMAGE_EnemyBullets);
 		}
-		this.r=r;
-		this.power=power;
-		this.isLive=true;
+		this.r = r;
+		this.power = power;
+		this.isLive = true;
 	}
 
 	@Override
@@ -55,21 +55,21 @@ public class EnemyBullet implements Bullet, Serializable{
 
 	@Override
 	public void move() {
-		if(isLive && p.allowMove()){
-			r.y+=Constants.EnemyBulletVelocity;
-			if(r.y>=p.containerHeight){
-				this.isLive=false;
+		if (isLive && p.allowMove()) {
+			r.y += Constants.EnemyBulletVelocity;
+			if (r.y >= p.containerHeight) {
+				this.isLive = false;
 			}
 		}
 	}
-	
+
 	@Override
 	public void kill() {
-		Rectangle r=this.area();
+		Rectangle r = this.area();
 		// 杀我方飞机
-		if(p.myPlane.isLive() && r.intersects(p.myPlane.area())){
+		if (p.myPlane.isLive() && r.intersects(p.myPlane.area())) {
 			p.myPlane.addBlood(-power);
-			this.isLive=false;
+			this.isLive = false;
 		}
 	}
 
@@ -78,7 +78,7 @@ public class EnemyBullet implements Bullet, Serializable{
 		return this.isLive;
 	}
 
-	public void destroy(){
-		this.isLive=false;
+	public void destroy() {
+		this.isLive = false;
 	}
 }

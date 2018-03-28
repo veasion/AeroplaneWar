@@ -23,53 +23,53 @@ import cn.veasion.bean.GameBean;
  * @author Veasion
  */
 public class ResourceUtil {
-	
+
 	/**
-	 * 桌面路径. 
+	 * 桌面路径.
 	 */
-	public static String homePath=FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
-	
+	public static String homePath = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
+
 	/**
 	 * 根据相对路径获取图片资源
 	 * 
 	 * @since eg: loadImage("/images/a.png");
 	 */
 	public static Image loadImage(String name) {
-		try{
+		try {
 			return ImageIO.read(ResourceUtil.class.getResourceAsStream(name));
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
+
 	/**
-	 * 根据Container画面保存图片 
+	 * 根据Container画面保存图片
 	 */
-	public static void saveImageByContainer(Container container,String pathname, Integer width, Integer height, Integer imageType) throws IOException{
-		if(width==null){
-			width=container.getWidth();
+	public static void saveImageByContainer(Container container, String pathname, Integer width, Integer height,
+			Integer imageType) throws IOException {
+		if (width == null) {
+			width = container.getWidth();
 		}
-		if(height==null){
-			height=container.getHeight();
+		if (height == null) {
+			height = container.getHeight();
 		}
-		if(imageType==null){
-			imageType=BufferedImage.TYPE_3BYTE_BGR;
+		if (imageType == null) {
+			imageType = BufferedImage.TYPE_3BYTE_BGR;
 		}
-		BufferedImage buff=new BufferedImage(width, height, imageType);
+		BufferedImage buff = new BufferedImage(width, height, imageType);
 		container.paint(buff.getGraphics());
 		ImageIO.write(buff, "jpg", new File(pathname));
 	}
-	
+
 	/**
 	 * 播放wav格式音乐
 	 */
 	public static void playMusic(String path, GameBean p) throws Exception {
 		playWavMusic(ResourceUtil.class.getResourceAsStream(path), p);
 	}
-	
-	private static void playWavMusic(InputStream in, GameBean p) throws Exception{
+
+	private static void playWavMusic(InputStream in, GameBean p) throws Exception {
 		byte[] audioData = new byte[1024];
 		// 音源:即需要把本地或网络上的音频读进此处，
 		// 注意:声音的播方是在将声加入到此处之后，然后再写向声卡

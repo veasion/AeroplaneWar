@@ -12,7 +12,11 @@ import cn.veasion.util.Resource;
 import cn.veasion.util.VeaUtil;
 
 /**
- * 定时制造敌机丶补给线程
+ * 定时制造敌机丶补给线程. <br>
+ * <br>
+ * <a href="https://github.com/veasion">Github</a> &nbsp;&nbsp;
+ * <a href="http://www.luozhuowei.cn">Website</a> &nbsp;&nbsp;
+ * <a href="mailto:luozhuowei.kong@qq.com">Email</a>
  * 
  * @author Veasion
  */
@@ -30,9 +34,10 @@ public class ProducedThread extends Thread {
 			if (GameBean.STATUS_GAME == p.getStatus()) {
 				// 创建敌机
 				if ((System.currentTimeMillis() - p.createEnemyTime >= Constants.CreateEnemyFrequency
-						|| p.enemyPlanes.size() < 3) && p.enemyPlanes.size()<=Constants.EnemyMaxCount) {
+						|| p.enemyPlanes.size() < 3) && p.enemyPlanes.size() <= Constants.EnemyMaxCount) {
 					EnemyPlane ep = new EnemyPlane(p);
-					ep.create(null, Constants.EnemyBlood, new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 50));
+					ep.create(null, Constants.EnemyBlood,
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 50));
 					p.enemyPlanes.add(ep);
 					p.createEnemyTime = System.currentTimeMillis();
 				}
@@ -40,8 +45,9 @@ public class ProducedThread extends Thread {
 				if (System.currentTimeMillis() - p.createBossTime >= VeaUtil
 						.random(Constants.CreateEnemyBossFrequency - 200, Constants.CreateEnemyBossFrequency + 500)) {
 					EnemyBoos boos = new EnemyBoos(p);
-					int index=VeaUtil.random(0, Resource.IMAGE_EnemyBosss.length-1);
-					boos.create(Resource.IMAGE_EnemyBosss[index], Resource.IMAGE_BossBullets[index], Constants.EnemyBossBlood, new Rectangle((p.containerWidth-80)/2, 0, 80, 80));
+					int index = VeaUtil.random(0, Resource.IMAGE_EnemyBosss.length - 1);
+					boos.create(Resource.IMAGE_EnemyBosss[index], Resource.IMAGE_BossBullets[index],
+							Constants.EnemyBossBlood, new Rectangle((p.containerWidth - 80) / 2, 0, 80, 80));
 					p.enemyBoss = boos;
 					p.createBossTime = System.currentTimeMillis();
 				}
@@ -50,7 +56,7 @@ public class ProducedThread extends Thread {
 						.random(Constants.CreateBloodSupplyFrequency01, Constants.CreateBloodSupplyFrequency01 + 200)) {
 					BloodSupply bs = new BloodSupply(p);
 					bs.create(Resource.IMAGE_BloodSupply01, VeaUtil.random(18, 35), BloodSupply.TYPE_BloodSupply,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 60));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 60));
 					p.bloodSupplys.add(bs);
 					p.createBloodSupply01Time = System.currentTimeMillis();
 				}
@@ -59,7 +65,7 @@ public class ProducedThread extends Thread {
 						.random(Constants.CreateBloodSupplyFrequency02, Constants.CreateBloodSupplyFrequency02 + 200)) {
 					BloodSupply bs = new BloodSupply(p);
 					bs.create(Resource.IMAGE_BloodSupply02, 100, BloodSupply.TYPE_BloodSupply,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 40, 35));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 40, 35));
 					p.bloodSupplys.add(bs);
 					p.createBloodSupply02Time = System.currentTimeMillis();
 				}
@@ -68,7 +74,7 @@ public class ProducedThread extends Thread {
 						Constants.CreateBulletSupply02Frequency - 200, Constants.CreateBulletSupply02Frequency + 200)) {
 					WeaponsSupply ws = new WeaponsSupply(p);
 					ws.create(Resource.IMAGE_BulletSupply02, VeaUtil.random(80, 120), WeaponsSupply.TYPE_BulletSupply02,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 50));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 50));
 					p.weaponsSupplys.add(ws);
 					p.createBulletSupply02Time = System.currentTimeMillis();
 				}
@@ -77,7 +83,7 @@ public class ProducedThread extends Thread {
 						Constants.CreateBulletSupply03Frequency - 200, Constants.CreateBulletSupply03Frequency + 200)) {
 					WeaponsSupply ws = new WeaponsSupply(p);
 					ws.create(Resource.IMAGE_BulletSupply03, VeaUtil.random(70, 95), WeaponsSupply.TYPE_BulletSupply03,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 50));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 50));
 					p.weaponsSupplys.add(ws);
 					p.createBulletSupply03Time = System.currentTimeMillis();
 				}
@@ -86,7 +92,7 @@ public class ProducedThread extends Thread {
 						Constants.CreateBulletSupply04Frequency - 200, Constants.CreateBulletSupply04Frequency + 200)) {
 					WeaponsSupply ws = new WeaponsSupply(p);
 					ws.create(Resource.IMAGE_BulletSupply04, VeaUtil.random(1, 4), WeaponsSupply.TYPE_BulletSupply04,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 50));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 50));
 					p.weaponsSupplys.add(ws);
 					p.createBulletSupply04Time = System.currentTimeMillis();
 				}
@@ -95,7 +101,7 @@ public class ProducedThread extends Thread {
 						Constants.CreateBulletSupply05Frequency - 200, Constants.CreateBulletSupply05Frequency + 200)) {
 					WeaponsSupply ws = new WeaponsSupply(p);
 					ws.create(Resource.IMAGE_BulletSupply05, VeaUtil.random(50, 65), WeaponsSupply.TYPE_BulletSupply05,
-							new Rectangle(VeaUtil.random(0, p.containerWidth-30), -80, 50, 50));
+							new Rectangle(VeaUtil.random(0, p.containerWidth - 30), -80, 50, 50));
 					p.weaponsSupplys.add(ws);
 					p.createBulletSupply05Time = System.currentTimeMillis();
 				}

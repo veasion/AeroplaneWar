@@ -8,5 +8,5 @@ package cn.veasion.bean.inf;
 public interface Kill {
 
 	void kill();
-	
+
 }
